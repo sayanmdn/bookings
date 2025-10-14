@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import BookingTable from '@/components/BookingTable';
+import Header from '@/components/Header';
 import dbConnect from '@/lib/mongodb';
 import Booking from '@/lib/models/Booking';
 
@@ -19,6 +20,7 @@ export default async function AdvancePendingPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Advance Not Received</h1>

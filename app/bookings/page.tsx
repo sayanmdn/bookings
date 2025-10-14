@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import BookingTable from '@/components/BookingTable';
+import Header from '@/components/Header';
 import dbConnect from '@/lib/mongodb';
 import Booking, { IBooking } from '@/lib/models/Booking';
 
@@ -22,6 +23,7 @@ export default async function AllBookingsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">All Bookings</h1>

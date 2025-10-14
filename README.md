@@ -4,11 +4,13 @@ A Next.js web application for managing hotel/accommodation bookings with Excel f
 
 ## Features
 
+- 🔐 **Google SSO Authentication** - Secure login with Google accounts
 - 📤 **Drag & Drop Excel Upload** - Upload .xls/.xlsx files with booking data
 - 🔄 **Smart Data Processing** - Automatically updates existing bookings and adds new ones
 - 💰 **Advance Payment Tracking** - Mark and track advance payments
 - 📊 **Dashboard** - View statistics and manage bookings
 - 📱 **Responsive Design** - Works on desktop and mobile devices
+- 🛡️ **Protected Routes** - All pages secured with authentication middleware
 
 ## Getting Started
 
@@ -18,12 +20,20 @@ A Next.js web application for managing hotel/accommodation bookings with Excel f
 npm install
 ```
 
-### 2. Configure MongoDB
+### 2. Configure Environment Variables
 
-Your MongoDB URI is already configured in `.env.local`:
+Update `.env.local` with your credentials:
+```env
+MONGODB_URI=your-mongodb-connection-string
+NEXT_TELEMETRY_DISABLED=1
+
+# NextAuth Configuration
+AUTH_SECRET=generate-using-openssl-rand-base64-32
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
-MONGODB_URI=mongodb+srv://sayanmdn2:jfZRELq9XhG0rquc@backend-serverless.3e0kv62.mongodb.net/?retryWrites=true&w=majority&appName=backend-serverless
-```
+
+**🔐 For Google SSO Setup:** See [GOOGLE_SSO_SETUP.md](GOOGLE_SSO_SETUP.md) for detailed instructions.
 
 ### 3. Run Development Server
 
@@ -97,12 +107,20 @@ Your Excel file should have these columns:
 3. Add the following environment variables in Vercel's project settings:
    - `MONGODB_URI` - Your MongoDB Atlas connection string
    - `NEXT_TELEMETRY_DISABLED` - Set to `1`
+   - `AUTH_SECRET` - Generate using `openssl rand -base64 32`
+   - `GOOGLE_CLIENT_ID` - From Google Cloud Console
+   - `GOOGLE_CLIENT_SECRET` - From Google Cloud Console
 
 4. Deploy! Vercel will automatically build and deploy your app
+
+5. **Important:** After deployment, update your Google OAuth redirect URIs with your Vercel URL
 
 ### Environment Variables Required:
 - `MONGODB_URI` - MongoDB connection string (required)
 - `NEXT_TELEMETRY_DISABLED` - Set to `1` to disable telemetry
+- `AUTH_SECRET` - Secret key for NextAuth (required)
+- `GOOGLE_CLIENT_ID` - Google OAuth Client ID (required)
+- `GOOGLE_CLIENT_SECRET` - Google OAuth Client Secret (required)
 
 ### Build Command:
 ```bash

@@ -65,7 +65,7 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
 
       // Clear the amount input
       setAmounts({ ...amounts, [id]: '' });
-    } catch (error) {
+    } catch {
       alert('Failed to update booking');
     } finally {
       setLoadingId(null);
@@ -101,14 +101,14 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
 
       if (!response.ok) throw new Error('Failed to cancel booking');
 
-      const data = await response.json();
+      await response.json();
 
       // Update local state to mark as cancelled
       setLocalBookings(
         localBookings.map((b) => (b._id === id ? { ...b, bookingStatus: 'cancelled' } : b))
       );
       alert('Booking cancelled successfully');
-    } catch (error) {
+    } catch {
       alert('Failed to cancel booking');
     } finally {
       setLoadingId(null);

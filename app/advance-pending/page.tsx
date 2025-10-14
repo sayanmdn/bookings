@@ -1,19 +1,13 @@
 import Link from 'next/link';
 import BookingTable from '@/components/BookingTable';
+import dbConnect from '@/lib/mongodb';
+import Booking from '@/lib/models/Booking';
 
 async function getAdvancePendingBookings() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/bookings?advancePending=true`, {
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch bookings');
-    }
-
-    const data = await response.json();
-    return data.bookings;
+    await dbConnect();
+    const bookings = await Booking.find({ advanceReceived: false }).sort({ checkIn: -1 }).lean();
+    return JSON.parse(JSON.stringify(bookings));
   } catch (error) {
     console.error('Error fetching advance pending bookings:', error);
     return [];
@@ -48,7 +42,7 @@ export default async function AdvancePendingPage() {
           </Link>
         </div>
 
-        <BookingTable bookings={bookings} showAdvanceAction={true} />
+        <BookingTable bookings={bookings as never[]} showAdvanceAction={true} />
       </div>
     </div>
   );

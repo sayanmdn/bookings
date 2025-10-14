@@ -1,27 +1,21 @@
 import Link from 'next/link';
 import FileUpload from '@/components/FileUpload';
 import { Calendar, CheckCircle, FileSpreadsheet } from 'lucide-react';
+import dbConnect from '@/lib/mongodb';
+import Booking from '@/lib/models/Booking';
 
 async function getStats() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/bookings`, {
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      return { total: 0, pending: 0, received: 0 };
-    }
-
-    const data = await response.json();
-    const bookings = data.bookings;
+    await dbConnect();
+    const bookings = await Booking.find({}).lean();
 
     return {
       total: bookings.length,
-      pending: bookings.filter((b: any) => !b.advanceReceived).length,
-      received: bookings.filter((b: any) => b.advanceReceived).length,
+      pending: bookings.filter((b) => !b.advanceReceived).length,
+      received: bookings.filter((b) => b.advanceReceived).length,
     };
   } catch (error) {
+    console.error('Error fetching stats:', error);
     return { total: 0, pending: 0, received: 0 };
   }
 }

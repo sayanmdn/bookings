@@ -1,19 +1,13 @@
 import Link from 'next/link';
 import BookingTable from '@/components/BookingTable';
+import dbConnect from '@/lib/mongodb';
+import Booking, { IBooking } from '@/lib/models/Booking';
 
-async function getAllBookings() {
+async function getAllBookings(): Promise<IBooking[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/bookings`, {
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch bookings');
-    }
-
-    const data = await response.json();
-    return data.bookings;
+    await dbConnect();
+    const bookings = await Booking.find({}).sort({ checkIn: -1 }).lean();
+    return JSON.parse(JSON.stringify(bookings));
   } catch (error) {
     console.error('Error fetching all bookings:', error);
     return [];
@@ -23,8 +17,8 @@ async function getAllBookings() {
 export default async function AllBookingsPage() {
   const bookings = await getAllBookings();
 
-  const advancePending = bookings.filter((b: any) => !b.advanceReceived).length;
-  const advanceReceived = bookings.filter((b: any) => b.advanceReceived).length;
+  const advancePending = bookings.filter((b: IBooking) => !b.advanceReceived).length;
+  const advanceReceived = bookings.filter((b: IBooking) => b.advanceReceived).length;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -51,7 +45,7 @@ export default async function AllBookingsPage() {
           </Link>
         </div>
 
-        <BookingTable bookings={bookings} showAdvanceAction={false} />
+        <BookingTable bookings={bookings as never[]} showAdvanceAction={false} />
       </div>
     </div>
   );

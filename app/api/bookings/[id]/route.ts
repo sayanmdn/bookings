@@ -12,7 +12,9 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const updateData: any = { advanceReceived: body.advanceReceived };
+    const updateData: { advanceReceived: boolean; advanceAmount?: number } = {
+      advanceReceived: body.advanceReceived
+    };
 
     if (body.advanceAmount !== undefined) {
       updateData.advanceAmount = body.advanceAmount;

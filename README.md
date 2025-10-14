@@ -88,12 +88,25 @@ Your Excel file should have these columns:
 
 ## Deployment
 
-Deploy to Vercel:
+### Deploy to Vercel:
 
+1. Push your code to GitHub (make sure `.env.local` is not committed)
+
+2. Go to [Vercel](https://vercel.com) and import your repository
+
+3. Add the following environment variables in Vercel's project settings:
+   - `MONGODB_URI` - Your MongoDB Atlas connection string
+   - `NEXT_TELEMETRY_DISABLED` - Set to `1`
+
+4. Deploy! Vercel will automatically build and deploy your app
+
+### Environment Variables Required:
+- `MONGODB_URI` - MongoDB connection string (required)
+- `NEXT_TELEMETRY_DISABLED` - Set to `1` to disable telemetry
+
+### Build Command:
 ```bash
 npm run build
 ```
 
-Then deploy via Vercel CLI or connect your GitHub repo to Vercel.
-
-Don't forget to add your environment variable `MONGODB_URI` in Vercel's project settings.
+The app will now build successfully on Vercel without hanging on telemetry prompts.

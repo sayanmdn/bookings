@@ -7,7 +7,7 @@ import Booking from '@/lib/models/Booking';
 async function getStats() {
   try {
     await dbConnect();
-    const bookings = await Booking.find({}).lean();
+    const bookings = await Booking.find({}).sort({ checkIn: 1 }).lean();
 
     return {
       total: bookings.length,

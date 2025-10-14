@@ -6,7 +6,7 @@ import Booking, { IBooking } from '@/lib/models/Booking';
 async function getAllBookings(): Promise<IBooking[]> {
   try {
     await dbConnect();
-    const bookings = await Booking.find({}).sort({ checkIn: -1 }).lean();
+    const bookings = await Booking.find({}).sort({ checkIn: 1 }).lean();
     return JSON.parse(JSON.stringify(bookings));
   } catch (error) {
     console.error('Error fetching all bookings:', error);

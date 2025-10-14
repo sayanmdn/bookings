@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       query = { advanceReceived: false };
     }
 
-    const bookings = await Booking.find(query).sort({ checkIn: -1 }).lean();
+    const bookings = await Booking.find(query).sort({ checkIn: 1 }).lean();
 
     return NextResponse.json({ bookings });
   } catch (error) {

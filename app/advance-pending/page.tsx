@@ -6,7 +6,7 @@ import Booking from '@/lib/models/Booking';
 async function getAdvancePendingBookings() {
   try {
     await dbConnect();
-    const bookings = await Booking.find({ advanceReceived: false }).sort({ checkIn: -1 }).lean();
+    const bookings = await Booking.find({ advanceReceived: false }).sort({ checkIn: 1 }).lean();
     return JSON.parse(JSON.stringify(bookings));
   } catch (error) {
     console.error('Error fetching advance pending bookings:', error);

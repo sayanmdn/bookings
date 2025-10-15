@@ -4,6 +4,10 @@ import Header from '@/components/Header';
 import dbConnect from '@/lib/mongodb';
 import Booking, { IBooking } from '@/lib/models/Booking';
 
+// Disable caching for this page to always show fresh data
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getAllBookings(): Promise<IBooking[]> {
   try {
     await dbConnect();

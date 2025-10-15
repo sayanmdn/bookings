@@ -4,6 +4,10 @@ import Header from '@/components/Header';
 import dbConnect from '@/lib/mongodb';
 import Booking from '@/lib/models/Booking';
 
+// Disable caching for this page to always show fresh data
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getAdvancePendingBookings() {
   try {
     await dbConnect();

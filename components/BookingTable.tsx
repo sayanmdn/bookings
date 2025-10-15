@@ -115,6 +115,37 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
     }
   };
 
+  const handleReactivateBooking = async (id: string, bookNumber: number) => {
+    if (!confirm(`Are you sure you want to re-activate booking #${bookNumber}?`)) {
+      return;
+    }
+
+    setLoadingId(id);
+    try {
+      const response = await fetch(`/api/bookings/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingStatus: 'active'
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to re-activate booking');
+
+      await response.json();
+
+      // Update local state to mark as active
+      setLocalBookings(
+        localBookings.map((b) => (b._id === id ? { ...b, bookingStatus: 'active' } : b))
+      );
+      alert('Booking re-activated successfully');
+    } catch {
+      alert('Failed to re-activate booking');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   if (localBookings.length === 0) {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg">
@@ -276,17 +307,25 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
                 </td>
               )}
               <td className="px-4 py-3 whitespace-nowrap text-sm">
-                <button
-                  onClick={() => handleCancelBooking(booking._id, booking.bookNumber)}
-                  disabled={loadingId === booking._id || booking.bookingStatus === 'cancelled'}
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {booking.bookingStatus === 'cancelled'
-                    ? 'Cancelled'
-                    : loadingId === booking._id
-                    ? 'Cancelling...'
-                    : 'Cancel Booking'}
-                </button>
+                <div className="flex gap-2">
+                  {booking.bookingStatus === 'cancelled' ? (
+                    <button
+                      onClick={() => handleReactivateBooking(booking._id, booking.bookNumber)}
+                      disabled={loadingId === booking._id}
+                      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loadingId === booking._id ? 'Re-activating...' : 'Re-activate'}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleCancelBooking(booking._id, booking.bookNumber)}
+                      disabled={loadingId === booking._id}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loadingId === booking._id ? 'Cancelling...' : 'Cancel Booking'}
+                    </button>
+                  )}
+                </div>
               </td>
             </tr>
           ))}

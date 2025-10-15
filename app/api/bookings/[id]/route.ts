@@ -12,12 +12,18 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const updateData: { advanceReceived: boolean; advanceAmount?: number } = {
-      advanceReceived: body.advanceReceived
-    };
+    const updateData: { advanceReceived?: boolean; advanceAmount?: number; bookingStatus?: 'active' | 'cancelled' } = {};
+
+    if (body.advanceReceived !== undefined) {
+      updateData.advanceReceived = body.advanceReceived;
+    }
 
     if (body.advanceAmount !== undefined) {
       updateData.advanceAmount = body.advanceAmount;
+    }
+
+    if (body.bookingStatus !== undefined) {
+      updateData.bookingStatus = body.bookingStatus;
     }
 
     const booking = await Booking.findByIdAndUpdate(

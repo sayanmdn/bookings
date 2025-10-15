@@ -8,12 +8,37 @@ import Booking from '@/lib/models/Booking';
 async function getStats() {
   try {
     await dbConnect();
-    const bookings = await Booking.find({}).sort({ checkIn: 1 }).lean();
+
+    // Get total bookings
+    const total = await Booking.countDocuments({});
+
+    // Count pending advance (where advanceReceived is false or doesn't exist, and booking is active or field doesn't exist)
+    const pending = await Booking.countDocuments({
+      $and: [
+        {
+          $or: [
+            { advanceReceived: false },
+            { advanceReceived: { $exists: false } }
+          ]
+        },
+        {
+          $or: [
+            { bookingStatus: 'active' },
+            { bookingStatus: { $exists: false } }
+          ]
+        }
+      ]
+    });
+
+    // Count received advance (where advanceReceived is true)
+    const received = await Booking.countDocuments({
+      advanceReceived: true
+    });
 
     return {
-      total: bookings.length,
-      pending: bookings.filter((b) => !b.advanceReceived).length,
-      received: bookings.filter((b) => b.advanceReceived).length,
+      total,
+      pending,
+      received,
     };
   } catch (error) {
     console.error('Error fetching stats:', error);

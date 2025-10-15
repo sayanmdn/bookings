@@ -8,8 +8,20 @@ async function getAdvancePendingBookings() {
   try {
     await dbConnect();
     const bookings = await Booking.find({
-      advanceReceived: false,
-      bookingStatus: 'active'
+      $and: [
+        {
+          $or: [
+            { advanceReceived: false },
+            { advanceReceived: { $exists: false } }
+          ]
+        },
+        {
+          $or: [
+            { bookingStatus: 'active' },
+            { bookingStatus: { $exists: false } }
+          ]
+        }
+      ]
     }).sort({ checkIn: 1 }).lean();
     return JSON.parse(JSON.stringify(bookings));
   } catch (error) {

@@ -2,6 +2,11 @@ import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
 export default auth((req) => {
+  // Bypass authentication in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return NextResponse.next()
+  }
+
   const isLoggedIn = !!req.auth
   const isOnLoginPage = req.nextUrl.pathname.startsWith('/login')
 

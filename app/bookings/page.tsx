@@ -18,8 +18,13 @@ async function getAllBookings(): Promise<IBooking[]> {
 export default async function AllBookingsPage() {
   const bookings = await getAllBookings();
 
-  const advancePending = bookings.filter((b: IBooking) => !b.advanceReceived).length;
-  const advanceReceived = bookings.filter((b: IBooking) => b.advanceReceived).length;
+  // Count pending advance (where advanceReceived is false or doesn't exist, and booking is active or doesn't exist)
+  const advancePending = bookings.filter((b: IBooking) =>
+    (!b.advanceReceived || b.advanceReceived === false) &&
+    (!b.bookingStatus || b.bookingStatus === 'active')
+  ).length;
+
+  const advanceReceived = bookings.filter((b: IBooking) => b.advanceReceived === true).length;
 
   return (
     <div className="min-h-screen bg-gray-100">

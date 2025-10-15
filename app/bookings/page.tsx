@@ -24,8 +24,8 @@ export default async function AllBookingsPage() {
 
   // Count pending advance (where advanceReceived is false or doesn't exist, and booking is active or doesn't exist)
   const advancePending = bookings.filter((b: IBooking) =>
-    (!b.advanceReceived || b.advanceReceived === false) &&
-    (!b.bookingStatus || b.bookingStatus === 'active')
+    b.advanceReceived !== true &&
+    (b.bookingStatus === 'active' || !b.bookingStatus)
   ).length;
 
   const advanceReceived = bookings.filter((b: IBooking) => b.advanceReceived === true).length;

@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/send-advance-reminders",
+      "schedule": "30 14 * * *"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, MessageCircle } from 'lucide-react';
 
 interface Booking {
   _id: string;
@@ -141,6 +141,32 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
       alert('Booking re-activated successfully');
     } catch {
       alert('Failed to re-activate booking');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
+  const handleSendWhatsAppReminder = async (id: string, bookNumber: number) => {
+    if (!confirm(`Send WhatsApp reminder for booking #${bookNumber}?`)) {
+      return;
+    }
+
+    setLoadingId(id);
+    try {
+      const response = await fetch('/api/whatsapp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bookingId: id }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to send WhatsApp reminder');
+      }
+
+      alert('WhatsApp reminder sent successfully');
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Failed to send WhatsApp reminder');
     } finally {
       setLoadingId(null);
     }

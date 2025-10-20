@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import FileUpload from '@/components/FileUpload';
 import Header from '@/components/Header';
-import { Calendar, CheckCircle, FileSpreadsheet } from 'lucide-react';
+import { Calendar, CheckCircle, FileSpreadsheet, FileText } from 'lucide-react';
 import dbConnect from '@/lib/mongodb';
 import Booking from '@/lib/models/Booking';
 
@@ -102,12 +102,15 @@ export default async function Home() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link
             href="/advance-pending"
             className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
           >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Advance Not Received</h3>
+            <div className="flex items-center gap-3 mb-3">
+              <FileSpreadsheet className="w-8 h-8 text-orange-500" />
+              <h3 className="text-xl font-semibold text-gray-900">Advance Not Received</h3>
+            </div>
             <p className="text-gray-600 mb-4">
               View and manage bookings pending advance payment
             </p>
@@ -120,12 +123,47 @@ export default async function Home() {
             href="/bookings"
             className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
           >
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">All Bookings</h3>
+            <div className="flex items-center gap-3 mb-3">
+              <Calendar className="w-8 h-8 text-blue-500" />
+              <h3 className="text-xl font-semibold text-gray-900">All Bookings</h3>
+            </div>
             <p className="text-gray-600 mb-4">
               View complete list of all bookings
             </p>
             <span className="text-blue-600 font-medium">
               {stats.total} total →
+            </span>
+          </Link>
+
+          <Link
+            href="/invoice"
+            className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <FileText className="w-8 h-8 text-green-500" />
+              <h3 className="text-xl font-semibold text-gray-900">Generate Invoice</h3>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Create professional PDF invoices for bookings
+            </p>
+            <span className="text-green-600 font-medium">
+              Create invoice →
+            </span>
+          </Link>
+
+          <Link
+            href="/invoices"
+            className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <FileText className="w-8 h-8 text-purple-500" />
+              <h3 className="text-xl font-semibold text-gray-900">View Invoices</h3>
+            </div>
+            <p className="text-gray-600 mb-4">
+              View all generated invoices and payment status
+            </p>
+            <span className="text-purple-600 font-medium">
+              View all →
             </span>
           </Link>
         </div>

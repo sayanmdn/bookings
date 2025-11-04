@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, Phone } from 'lucide-react';
 
 interface Booking {
   _id: string;
@@ -239,14 +239,23 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
                 {booking.price}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                <a
-                  href={`https://wa.me/91${booking.phoneNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-600 hover:text-green-800 hover:underline"
-                >
-                  {booking.phoneNumber}
-                </a>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`https://wa.me/91${booking.phoneNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-600 hover:text-green-800 hover:underline"
+                  >
+                    {booking.phoneNumber}
+                  </a>
+                  <a
+                    href={`tel:+91${booking.phoneNumber}`}
+                    className="bg-blue-500 hover:bg-blue-600 text-white p-1.5 rounded-full transition-colors"
+                    title="Call this number"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm">
                 <span

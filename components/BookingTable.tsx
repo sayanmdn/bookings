@@ -239,7 +239,14 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
                 {booking.price}
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                {booking.phoneNumber}
+                <a
+                  href={`https://wa.me/91${booking.phoneNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-600 hover:text-green-800 hover:underline"
+                >
+                  {booking.phoneNumber}
+                </a>
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm">
                 <span

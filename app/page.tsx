@@ -34,9 +34,17 @@ async function getStats() {
       ]
     });
 
-    // Count received advance (where advanceReceived is true)
+    // Count active advance received (where advanceReceived is true and checkout not passed)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const received = await Booking.countDocuments({
-      advanceReceived: true
+      advanceReceived: true,
+      checkOut: { $gte: today },
+      $or: [
+        { bookingStatus: 'active' },
+        { bookingStatus: { $exists: false } }
+      ]
     });
 
     return {
@@ -64,35 +72,41 @@ export default async function Home() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Total Bookings</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+          <Link href="/bookings" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Total Bookings</p>
+                  <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+                </div>
+                <Calendar className="w-12 h-12 text-blue-500" />
               </div>
-              <Calendar className="w-12 h-12 text-blue-500" />
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Advance Pending</p>
-                <p className="text-3xl font-bold text-orange-600">{stats.pending}</p>
+          <Link href="/advance-pending" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Advance Pending</p>
+                  <p className="text-3xl font-bold text-orange-600">{stats.pending}</p>
+                </div>
+                <FileSpreadsheet className="w-12 h-12 text-orange-500" />
               </div>
-              <FileSpreadsheet className="w-12 h-12 text-orange-500" />
             </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">Advance Received</p>
-                <p className="text-3xl font-bold text-green-600">{stats.received}</p>
+          <Link href="/active-advance" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Active - Advance Received</p>
+                  <p className="text-3xl font-bold text-green-600">{stats.received}</p>
+                </div>
+                <CheckCircle className="w-12 h-12 text-green-500" />
               </div>
-              <CheckCircle className="w-12 h-12 text-green-500" />
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Upload Section */}
@@ -102,7 +116,7 @@ export default async function Home() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           <Link
             href="/advance-pending"
             className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
@@ -116,6 +130,22 @@ export default async function Home() {
             </p>
             <span className="text-orange-600 font-medium">
               {stats.pending} pending →
+            </span>
+          </Link>
+
+          <Link
+            href="/active-advance"
+            className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <CheckCircle className="w-8 h-8 text-green-500" />
+              <h3 className="text-xl font-semibold text-gray-900">Active Advance Received</h3>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Bookings with advance received and checkout not passed
+            </p>
+            <span className="text-green-600 font-medium">
+              {stats.received} active →
             </span>
           </Link>
 

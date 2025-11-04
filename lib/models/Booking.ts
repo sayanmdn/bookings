@@ -18,7 +18,7 @@ export interface IBooking {
   remarks?: string;
   bookerCountry: string;
   travelPurpose?: string;
-  device: string;
+  device?: string;
   unitType: string;
   durationNights: number;
   phoneNumber: number;
@@ -54,7 +54,7 @@ const BookingSchema = new Schema<IBooking>(
     remarks: { type: String },
     bookerCountry: { type: String, required: true },
     travelPurpose: { type: String },
-    device: { type: String, required: true },
+    device: { type: String },
     unitType: { type: String, required: true },
     durationNights: { type: Number, required: true },
     phoneNumber: { type: Number, required: true },

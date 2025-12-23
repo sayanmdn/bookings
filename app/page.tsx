@@ -202,9 +202,9 @@ export default function LandingPage() {
                 text: "Beautiful hostel, with capsule beds for your comfort. Quaint atmosphere with views of Kanchenjunga. I'd honestly recommend this for the solo traveller who wants to get into backpacking mode."
               },
               {
-                name: "Rajkumar M",
-                role: "Business Traveler",
-                text: "Impressive host! Despite the location, it has greater value for the buck. Cleanliness, views from the balcony, and a nice common area make it a great choice."
+                name: "Chinmoy Thakuria",
+                role: "Traveler",
+                text: "I had a wonderful staying experience in this hostel. I genuinely liked the service, rooms, cleanliness, the vibes everything. If you are in doubt whether it will be good, I just want to say you can go for it you wont regret."
               }
             ].map((review, i) => (
               <div key={i} className="bg-slate-50 p-8 rounded-2xl relative hover:shadow-md transition-shadow text-left">

@@ -173,7 +173,7 @@ export default function InvoicePage() {
                     value={formData.guestName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Enter guest name"
                   />
                 </div>
@@ -197,7 +197,7 @@ export default function InvoicePage() {
                     value={formData.checkIn}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   />
                 </div>
 
@@ -212,7 +212,7 @@ export default function InvoicePage() {
                     value={formData.checkOut}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   />
                 </div>
 
@@ -226,7 +226,7 @@ export default function InvoicePage() {
                     value={formData.roomType}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   >
                     <option value="">Select room type</option>
                     <option value="Single Bed in Mixed Dormitory Room">Single Bed in Mixed Dormitory Room</option>
@@ -246,7 +246,7 @@ export default function InvoicePage() {
                     onChange={handleInputChange}
                     min="1"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   />
                 </div>
 
@@ -262,7 +262,7 @@ export default function InvoicePage() {
                     onChange={handleInputChange}
                     min="1"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                   />
                 </div>
 
@@ -279,7 +279,7 @@ export default function InvoicePage() {
                     min="0"
                     step="0.01"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="0.00"
                   />
                 </div>
@@ -304,7 +304,7 @@ export default function InvoicePage() {
                     onChange={handleInputChange}
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="0.00"
                   />
                   <p className="mt-1 text-xs text-gray-500">Enter the amount received from guest</p>
@@ -320,7 +320,7 @@ export default function InvoicePage() {
                     value={formData.remarks}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 bg-white"
                     placeholder="Any additional notes or remarks"
                   />
                 </div>

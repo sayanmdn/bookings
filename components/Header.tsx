@@ -10,7 +10,7 @@ export default async function Header() {
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div>
-          <Link href="/">
+          <Link href="/dashboard">
             <h2 className="text-xl font-semibold text-gray-800 cursor-pointer hover:text-gray-600 transition-colors">Booking Management</h2>
           </Link>
           {session?.user?.email && (

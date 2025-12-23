@@ -9,13 +9,19 @@ export default auth((req) => {
 
   const isLoggedIn = !!req.auth
   const isOnLoginPage = req.nextUrl.pathname.startsWith('/login')
+  const isOnLandingPage = req.nextUrl.pathname === '/'
+
+  // Allow public access to landing page
+  if (isOnLandingPage) {
+    return NextResponse.next()
+  }
 
   if (!isLoggedIn && !isOnLoginPage) {
     return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
 
   if (isLoggedIn && isOnLoginPage) {
-    return NextResponse.redirect(new URL('/', req.nextUrl))
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
   }
 
   return NextResponse.next()

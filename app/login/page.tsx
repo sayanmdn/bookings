@@ -1,6 +1,12 @@
 import { signIn } from "@/auth"
+import { redirect } from "next/navigation"
 
 export default function LoginPage() {
+  // In development mode, skip login and redirect to dashboard
+  if (process.env.NODE_ENV === 'development') {
+    redirect('/dashboard')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
@@ -14,7 +20,7 @@ export default function LoginPage() {
         <form
           action={async () => {
             "use server"
-            await signIn("google", { redirectTo: "/" })
+            await signIn("google", { redirectTo: "/dashboard" })
           }}
         >
           <button

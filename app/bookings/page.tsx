@@ -43,7 +43,7 @@ export default async function AllBookingsPage() {
 
         <div className="mb-6 flex gap-4">
           <Link
-            href="/"
+            href="/dashboard"
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             Home

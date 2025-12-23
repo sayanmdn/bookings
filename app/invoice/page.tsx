@@ -134,7 +134,7 @@ export default function InvoicePage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
-            href="/"
+            href="/dashboard"
             className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
           >
             ← Back to Home
@@ -370,7 +370,7 @@ export default function InvoicePage() {
             {/* Submit Button */}
             <div className="flex justify-end gap-4">
               <Link
-                href="/"
+                href="/dashboard"
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
               >
                 Cancel

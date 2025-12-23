@@ -57,7 +57,7 @@ export default async function InvoicesPage() {
           {/* Navigation */}
           <div className="flex gap-4">
             <Link
-              href="/"
+              href="/dashboard"
               className="px-4 py-2 bg-white text-gray-700 rounded-md hover:bg-gray-50 border border-gray-300"
             >
               Home

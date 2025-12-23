@@ -33,7 +33,7 @@ export default function LandingPage() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero-mountain.png"
+            src="/hero-mountain.jpg"
             alt="View of Mount Kanchenjunga"
             fill
             className="object-cover"

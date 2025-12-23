@@ -4,7 +4,7 @@ import { MapPin, Wifi, Coffee, Lock, Users, Mountain, ArrowRight, Instagram, Sta
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-500 selection:text-white overflow-x-hidden w-full max-w-full">
       {/* Navigation */}
       <nav className="fixed w-full z-50 top-0 transition-all duration-300 bg-white/10 backdrop-blur-md border-b border-white/20">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -29,7 +29,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden w-full">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -88,7 +88,7 @@ export default function LandingPage() {
       </section>
 
       {/* Location Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-24 bg-white relative overflow-hidden overflow-x-hidden w-full">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2">
@@ -144,7 +144,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section - Glassmorphism */}
-      <section id="amenities" className="py-24 bg-slate-50 relative">
+      <section id="amenities" className="py-24 bg-slate-50 relative overflow-hidden w-full">
         {/* Decorative blobs */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-200 rounded-full blur-3xl opacity-20 -translate-x-1/2 translate-y-1/2" />
@@ -186,7 +186,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonial / Social Proof */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="py-24 bg-white border-t border-slate-100 w-full overflow-hidden">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-slate-900 mb-12">Travelers Love Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -223,7 +223,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden overflow-x-hidden w-full">
         <div className="absolute inset-0 bg-indigo-900" />
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay" />
 
@@ -257,7 +257,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 w-full overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">

@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { UserRole } from '@/lib/models/DefaultUser';
 import dbConnect from '@/lib/mongodb';
 import Booking from '@/lib/models/Booking';
 
@@ -7,6 +9,24 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check authentication
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Check authorization - EDITOR or ADMIN only
+    if (![UserRole.EDITOR, UserRole.ADMIN].includes(session.user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+
     await dbConnect();
 
     const { id } = await params;
@@ -51,6 +71,24 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Check authentication
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Check authorization - EDITOR or ADMIN only
+    if (![UserRole.EDITOR, UserRole.ADMIN].includes(session.user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+
     await dbConnect();
 
     const { id } = await params;

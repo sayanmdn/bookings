@@ -1,10 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { UserRole } from '@/lib/models/DefaultUser';
 import { renderToBuffer } from '@react-pdf/renderer';
 import React from 'react';
 import InvoiceTemplate from '@/components/InvoiceTemplate';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Check authorization - EDITOR or ADMIN only
+    if (![UserRole.EDITOR, UserRole.ADMIN].includes(session.user.role)) {
+      return NextResponse.json(
+        { error: 'Forbidden - Insufficient permissions' },
+        { status: 403 }
+      );
+    }
+
     const pdfData = await request.json();
 
     // Generate PDF

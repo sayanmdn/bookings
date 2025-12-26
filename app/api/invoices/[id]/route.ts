@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { UserRole } from '@/lib/models/DefaultUser';
+import { UserRole } from '@/lib/types/user';
 import dbConnect from '@/lib/mongodb';
 import Invoice from '@/lib/models/Invoice';
 

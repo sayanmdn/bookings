@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { UserRole } from '@/lib/models/DefaultUser';
+import { UserRole } from '@/lib/types/user';
 import { renderToBuffer } from '@react-pdf/renderer';
 import React from 'react';
 import InvoiceTemplate from '@/components/InvoiceTemplate';

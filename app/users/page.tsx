@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
-import { UserRole } from '@/lib/models/DefaultUser'
+import { UserRole } from '@/lib/types/user'
 import Header from '@/components/Header'
 import UsersTable from '@/components/UsersTable'
 import dbConnect from '@/lib/mongodb'

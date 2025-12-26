@@ -97,7 +97,7 @@ export default auth((req) => {
   }
 
   // Logged in on login page - redirect to role-appropriate page
-  if (isLoggedIn && isOnLoginPage) {
+  if (isLoggedIn && isOnLoginPage && req.auth) {
     const role = req.auth.user?.role || UserRole.USER
     return NextResponse.redirect(
       new URL(getDefaultRedirect(role), req.nextUrl)
@@ -105,7 +105,7 @@ export default auth((req) => {
   }
 
   // Check role-based access
-  if (isLoggedIn) {
+  if (isLoggedIn && req.auth) {
     const role = req.auth.user?.role || UserRole.USER
 
     if (!canAccessRoute(pathname, role)) {

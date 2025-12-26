@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
-import DefaultUser, { UserRole } from '@/lib/models/DefaultUser'
+import DefaultUser from '@/lib/models/DefaultUser'
+import { UserRole } from '@/lib/types/user'
 
 export async function GET(request: NextRequest) {
   try {

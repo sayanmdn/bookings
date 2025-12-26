@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Search, Shield, UserCog, Users as UsersIcon } from 'lucide-react'
-import { UserRole } from '@/lib/models/DefaultUser'
+import { UserRole } from '@/lib/types/user'
 
 interface User {
   id: string

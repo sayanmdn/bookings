@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { LogOut, Users, Shield, UserCog } from "lucide-react"
 import { handleSignOut } from "@/lib/actions/auth"
 import Link from "next/link"
-import { UserRole } from "@/lib/models/DefaultUser"
+import { UserRole } from "@/lib/types/user"
 
 export default async function Header() {
   const session = await auth()

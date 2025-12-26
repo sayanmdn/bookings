@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import dbConnect from '@/lib/mongodb'
-import DefaultUser, { UserRole } from '@/lib/models/DefaultUser'
+import DefaultUser from '@/lib/models/DefaultUser'
+import { UserRole } from '@/lib/types/user'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -39,8 +40,11 @@ export async function PATCH(
 
     await dbConnect()
 
+    // Await params before using
+    const { id } = await params
+
     // Fetch target user
-    const targetUser = await DefaultUser.findById(params.id)
+    const targetUser = await DefaultUser.findById(id)
 
     if (!targetUser) {
       return NextResponse.json(

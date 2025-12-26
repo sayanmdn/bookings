@@ -1,4 +1,5 @@
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth, { DefaultSession, User } from "next-auth"
+import { JWT } from "@auth/core/jwt"
 import Google from "next-auth/providers/google"
 import { UserRole } from "@/lib/types/user"
 
@@ -10,13 +11,9 @@ declare module "next-auth" {
       role: UserRole
     } & DefaultSession["user"]
   }
-
-  interface User {
-    role: UserRole
-  }
 }
 
-declare module "next-auth/jwt" {
+declare module "@auth/core/jwt" {
   interface JWT {
     id: string
     role: UserRole

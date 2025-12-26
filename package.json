@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "gcp-build": ""
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.1",

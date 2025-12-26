@@ -1,0 +1,14 @@
+# Exclude everything by default
+*
+
+# Explicitly allow these files/directories
+!/public/
+!/.next/
+!/package.json
+!/package-lock.json
+!/next.config.ts
+!/app.yaml
+!/server.js
+
+# Exclude dependencies (we use standalone build)
+/node_modules/

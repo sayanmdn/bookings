@@ -48,6 +48,12 @@ steps:
           target_cpu_utilization: 0.65
 
         handlers:
+          - url: /_next/static
+            static_dir: .next/static
+
+          - url: /public
+            static_dir: public
+
           - url: /.*
             script: auto
             secure: always

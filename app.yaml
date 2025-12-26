@@ -1,0 +1,19 @@
+runtime: nodejs20
+instance_class: F2
+
+env_variables:
+  NODE_ENV: production
+  NEXT_TELEMETRY_DISABLED: "1"
+  
+  # These are injected via Cloud Build substitutions - see cloudbuild.yaml
+  # Do NOT commit actual secret values to this file
+
+automatic_scaling:
+  min_instances: 0
+  max_instances: 2
+  target_cpu_utilization: 0.65
+
+handlers:
+  - url: /.*
+    script: auto
+    secure: always

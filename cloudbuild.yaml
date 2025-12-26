@@ -17,15 +17,16 @@ steps:
       - '-c'
       - |
         cp -r public .next/standalone/ 2>/dev/null || true
+        mkdir -p .next/standalone/.next
         cp -r .next/static .next/standalone/.next/
 
-  # Generate app.yaml with secrets injected
+  # Generate app.yaml with secrets injected (using envsubst for variable substitution)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        cat > app.yaml << 'EOF'
+        cat > app.yaml << EOF
         runtime: nodejs20
         instance_class: F2
 
@@ -35,11 +36,11 @@ steps:
           PORT: "8080"
           NODE_ENV: production
           NEXT_TELEMETRY_DISABLED: "1"
-          MONGODB_URI: "$$MONGODB_URI"
-          AUTH_URL: "$$AUTH_URL"
-          AUTH_SECRET: "$$AUTH_SECRET"
-          GOOGLE_CLIENT_ID: "$$GOOGLE_CLIENT_ID"
-          GOOGLE_CLIENT_SECRET: "$$GOOGLE_CLIENT_SECRET"
+          MONGODB_URI: "${MONGODB_URI}"
+          AUTH_URL: "${AUTH_URL}"
+          AUTH_SECRET: "${AUTH_SECRET}"
+          GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+          GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
 
         automatic_scaling:
           min_instances: 0

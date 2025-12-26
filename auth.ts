@@ -32,6 +32,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   trustHost: true,
   callbacks: {
+    // Redirect after sign in based on role
+    async redirect({ url, baseUrl }) {
+      // Redirect to dashboard after login, middleware will route based on role
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+      return `${baseUrl}/dashboard`
+    },
     // Called on successful sign in
     async signIn({ user, account }) {
       try {
@@ -76,34 +84,46 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     // Add user data to JWT token
     async jwt({ token, user, trigger }) {
-      if (user) {
-        // Dynamic imports to avoid loading in Edge Runtime
-        const dbConnect = (await import("@/lib/mongodb")).default
-        const DefaultUser = (await import("@/lib/models/DefaultUser")).default
+      try {
+        if (user) {
+          // Dynamic imports to avoid loading in Edge Runtime
+          const dbConnect = (await import("@/lib/mongodb")).default
+          const DefaultUser = (await import("@/lib/models/DefaultUser")).default
 
-        // Initial sign in - fetch role from database
-        await dbConnect()
-        const dbUser = await DefaultUser.findOne({
-          email: user.email?.toLowerCase()
-        })
+          // Initial sign in - fetch role from database
+          await dbConnect()
+          const dbUser = await DefaultUser.findOne({
+            email: user.email?.toLowerCase()
+          })
 
-        if (dbUser) {
-          token.id = dbUser._id.toString()
-          token.role = dbUser.role
+          if (dbUser) {
+            token.id = dbUser._id.toString()
+            token.role = dbUser.role
+          } else {
+            // Fallback if user not found - should not happen but prevents issues
+            console.error("User not found in database during JWT callback:", user.email)
+            token.role = UserRole.USER
+          }
+        } else if (trigger === "update") {
+          // Dynamic imports to avoid loading in Edge Runtime
+          const dbConnect = (await import("@/lib/mongodb")).default
+          const DefaultUser = (await import("@/lib/models/DefaultUser")).default
+
+          // Session update - refresh role from database
+          await dbConnect()
+          const dbUser = await DefaultUser.findOne({
+            email: token.email?.toLowerCase()
+          })
+
+          if (dbUser) {
+            token.role = dbUser.role
+          }
         }
-      } else if (trigger === "update") {
-        // Dynamic imports to avoid loading in Edge Runtime
-        const dbConnect = (await import("@/lib/mongodb")).default
-        const DefaultUser = (await import("@/lib/models/DefaultUser")).default
-
-        // Session update - refresh role from database
-        await dbConnect()
-        const dbUser = await DefaultUser.findOne({
-          email: token.email?.toLowerCase()
-        })
-
-        if (dbUser) {
-          token.role = dbUser.role
+      } catch (error) {
+        console.error("Error in JWT callback:", error)
+        // Set default role on error to prevent issues
+        if (!token.role) {
+          token.role = UserRole.USER
         }
       }
 
@@ -113,8 +133,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // Add user data to session object
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id
-        session.user.role = token.role
+        session.user.id = token.id as string
+        // Ensure role is always set - fallback to USER if not present
+        session.user.role = (token.role as UserRole) || UserRole.USER
       }
       return session
     }

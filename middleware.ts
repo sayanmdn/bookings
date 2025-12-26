@@ -5,7 +5,7 @@ import { UserRole } from "@/lib/types/user"
 // Route access configuration
 const ROUTE_ACCESS = {
   // Public routes - no authentication required
-  public: ['/', '/login'],
+  public: ['/', '/login', '/debug'],
 
   // USER role - Welcome page only
   user: ['/welcome'],

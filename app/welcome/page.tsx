@@ -7,12 +7,13 @@ import { Shield, Mail } from 'lucide-react'
 export default async function WelcomePage() {
   const session = await auth()
 
-  // Redirect if not USER role (EDITOR/ADMIN go to dashboard)
+  // Redirect if not authenticated
   if (!session?.user) {
     redirect('/login')
   }
 
-  if (session.user.role !== UserRole.USER) {
+  // Only redirect if explicitly EDITOR or ADMIN (not if role is undefined or USER)
+  if (session.user.role && session.user.role !== UserRole.USER) {
     redirect('/dashboard')
   }
 

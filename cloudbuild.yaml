@@ -26,7 +26,7 @@ steps:
     args:
       - '-c'
       - |
-        cat > app.yaml << 'APPYAML'
+        cat > app.yaml <<EOF
         runtime: nodejs20
         instance_class: F2
 
@@ -36,13 +36,11 @@ steps:
           PORT: "8080"
           NODE_ENV: production
           NEXT_TELEMETRY_DISABLED: "1"
-        APPYAML
-        echo "  MONGODB_URI: \"$MONGODB_URI\"" >> app.yaml
-        echo "  AUTH_URL: \"$AUTH_URL\"" >> app.yaml
-        echo "  AUTH_SECRET: \"$AUTH_SECRET\"" >> app.yaml
-        echo "  GOOGLE_CLIENT_ID: \"$GOOGLE_CLIENT_ID\"" >> app.yaml
-        echo "  GOOGLE_CLIENT_SECRET: \"$GOOGLE_CLIENT_SECRET\"" >> app.yaml
-        cat >> app.yaml << 'APPYAML'
+          MONGODB_URI: "$$MONGODB_URI"
+          AUTH_URL: "$$AUTH_URL"
+          AUTH_SECRET: "$$AUTH_SECRET"
+          GOOGLE_CLIENT_ID: "$$GOOGLE_CLIENT_ID"
+          GOOGLE_CLIENT_SECRET: "$$GOOGLE_CLIENT_SECRET"
 
         automatic_scaling:
           min_instances: 0
@@ -53,7 +51,7 @@ steps:
           - url: /.*
             script: auto
             secure: always
-        APPYAML
+        EOF
     secretEnv: ['MONGODB_URI', 'AUTH_URL', 'AUTH_SECRET', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET']
 
   # Deploy to App Engine

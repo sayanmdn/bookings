@@ -1,7 +1,10 @@
 runtime: nodejs20
 instance_class: F2
 
+entrypoint: node .next/standalone/server.js
+
 env_variables:
+  PORT: "8080"
   NODE_ENV: production
   NEXT_TELEMETRY_DISABLED: "1"
   

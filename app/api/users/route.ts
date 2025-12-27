@@ -1,32 +1,36 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/session';
 import dbConnect from '@/lib/mongodb';
 import User from '@/lib/models/User';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
     try {
-        await dbConnect();
-        const { searchParams } = new URL(request.url);
-        const search = searchParams.get('search');
+        const user = await getCurrentUser(request);
 
-        let query = {};
-        if (search) {
-            const searchRegex = new RegExp(search, 'i');
-            query = {
+        if (!user || user.role !== 'ADMIN') {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        await dbConnect();
+
+        const searchParams = request.nextUrl.searchParams;
+        const query = searchParams.get('query');
+
+        let filter = {};
+        if (query) {
+            filter = {
                 $or: [
-                    { name: { $regex: searchRegex } },
-                    { email: { $regex: searchRegex } },
+                    { name: { $regex: query, $options: 'i' } },
+                    { email: { $regex: query, $options: 'i' } },
                 ],
             };
         }
 
-        const users = await User.find(query).select('name email image').limit(50);
+        const users = await User.find(filter).select('-__v').sort({ createdAt: -1 });
 
         return NextResponse.json(users);
     } catch (error) {
         console.error('Error fetching users:', error);
-        return NextResponse.json(
-            { error: 'Internal Server Error' },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

@@ -15,7 +15,14 @@ export default function Header() {
             <h2 className="text-xl font-semibold text-gray-800 cursor-pointer hover:text-gray-600 transition-colors">Booking Management</h2>
           </Link>
           {isAuthenticated && user?.email && (
-            <p className="text-sm text-gray-600">Signed in as {user.email}</p>
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-gray-600">Signed in as {user.email}</p>
+              {user.role === 'ADMIN' && (
+                <Link href="/users" className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                  Manage Users
+                </Link>
+              )}
+            </div>
           )}
         </div>
 

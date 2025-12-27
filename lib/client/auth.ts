@@ -7,6 +7,7 @@ export interface AuthUser {
     email: string
     name: string
     image?: string
+    role: 'USER' | 'EDITOR' | 'ADMIN'
 }
 
 export interface AuthData {

@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import ProtectedPage from '@/components/ProtectedPage';
 import { Calendar, CheckCircle, FileSpreadsheet, FileText, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/components/AuthProvider';
 
 interface Stats {
   total: number
@@ -14,6 +15,7 @@ interface Stats {
 }
 
 export default function DashboardPage() {
+  const { user } = useAuth()
   const [stats, setStats] = useState<Stats>({ total: 0, pending: 0, received: 0 })
   const [loading, setLoading] = useState(true)
 
@@ -35,7 +37,7 @@ export default function DashboardPage() {
   }, [])
 
   return (
-    <ProtectedPage>
+    <ProtectedPage allowedRoles={['EDITOR', 'ADMIN']}>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <Header />
         <div className="container mx-auto px-4 py-8">
@@ -171,21 +173,23 @@ export default function DashboardPage() {
               </span>
             </Link>
 
-            <Link
-              href="/users"
-              className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <Users className="w-8 h-8 text-indigo-500" />
-                <h3 className="text-xl font-semibold text-gray-900">View Users</h3>
-              </div>
-              <p className="text-gray-600 mb-4">
-                View and search all registered users
-              </p>
-              <span className="text-indigo-600 font-medium">
-                View users →
-              </span>
-            </Link>
+            {(user?.role === 'ADMIN' || (user?.role as string) === 'ADMIN') && (
+              <Link
+                href="/users"
+                className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <Users className="w-8 h-8 text-indigo-500" />
+                  <h3 className="text-xl font-semibold text-gray-900">View Users</h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  View and search all registered users
+                </p>
+                <span className="text-indigo-600 font-medium">
+                  View users →
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

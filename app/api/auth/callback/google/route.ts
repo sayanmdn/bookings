@@ -41,11 +41,16 @@ export async function GET(request: NextRequest) {
                 name: profile.name,
                 email: profile.email,
                 image: profile.picture,
+                role: profile.email === 'sayanmdn@gmail.com' ? 'ADMIN' : 'USER',
             })
         } else {
             // Update user profile if changed
             user.name = profile.name
             user.image = profile.picture
+            // Ensure hardcoded admin always has ADMIN role
+            if (user.email === 'sayanmdn@gmail.com' && user.role !== 'ADMIN') {
+                user.role = 'ADMIN'
+            }
             await user.save()
         }
 
@@ -55,6 +60,7 @@ export async function GET(request: NextRequest) {
             email: user.email,
             name: user.name,
             image: user.image,
+            role: user.role,
         })
 
         console.log('Session created for user:', user.email)
@@ -65,6 +71,7 @@ export async function GET(request: NextRequest) {
             email: user.email,
             name: user.name,
             image: user.image,
+            role: user.role,
         }
 
         // Redirect to auth callback page with token and user data

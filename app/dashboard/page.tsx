@@ -4,7 +4,7 @@ import Link from 'next/link';
 import FileUpload from '@/components/FileUpload';
 import Header from '@/components/Header';
 import ProtectedPage from '@/components/ProtectedPage';
-import { Calendar, CheckCircle, FileSpreadsheet, FileText } from 'lucide-react';
+import { Calendar, CheckCircle, FileSpreadsheet, FileText, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Stats {
@@ -168,6 +168,22 @@ export default function DashboardPage() {
               </p>
               <span className="text-purple-600 font-medium">
                 View all →
+              </span>
+            </Link>
+
+            <Link
+              href="/users"
+              className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <Users className="w-8 h-8 text-indigo-500" />
+                <h3 className="text-xl font-semibold text-gray-900">View Users</h3>
+              </div>
+              <p className="text-gray-600 mb-4">
+                View and search all registered users
+              </p>
+              <span className="text-indigo-600 font-medium">
+                View users →
               </span>
             </Link>
           </div>

@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
-import { getSession } from '@/lib/session'
+import { NextRequest, NextResponse } from 'next/server'
+import { getSessionFromHeader } from '@/lib/session'
 
-export async function GET() {
-    const session = await getSession()
+export async function GET(request: NextRequest) {
+    const session = getSessionFromHeader(request)
 
     if (!session) {
         return NextResponse.json({ user: null }, { status: 401 })

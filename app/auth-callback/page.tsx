@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/components/AuthProvider'
 
@@ -8,8 +8,12 @@ export default function AuthCallback() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const { login } = useAuth()
+    const hasRedirected = useRef(false)
 
     useEffect(() => {
+        // Prevent multiple executions
+        if (hasRedirected.current) return
+
         const token = searchParams.get('token')
         const userStr = searchParams.get('user')
 
@@ -20,14 +24,19 @@ export default function AuthCallback() {
                 // Save to localStorage via AuthProvider
                 login(token, user)
 
+                // Mark as redirected before pushing
+                hasRedirected.current = true
+
                 // Redirect to dashboard
                 router.push('/dashboard')
             } catch (error) {
                 console.error('Failed to parse user data:', error)
+                hasRedirected.current = true
                 router.push('/login?error=auth_failed')
             }
         } else {
             console.error('Missing token or user data')
+            hasRedirected.current = true
             router.push('/login?error=auth_failed')
         }
     }, [searchParams, router, login])

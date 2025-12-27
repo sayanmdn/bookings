@@ -1,32 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Wifi, Coffee, Lock, Users, Mountain, ArrowRight, Instagram, Star } from 'lucide-react';
+import LandingNav from '@/components/LandingNav';
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-500 selection:text-white overflow-x-hidden w-full max-w-full">
       {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 transition-all duration-300 bg-white/10 backdrop-blur-md border-b border-white/20">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-white tracking-tight drop-shadow-md">
-            Pathfinders Nest
-          </div>
-          <div className="flex gap-4 items-center">
-            <Link
-              href="/login"
-              className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
-            >
-              Book Now
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <LandingNav />
 
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden w-full">

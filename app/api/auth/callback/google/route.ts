@@ -69,7 +69,8 @@ export async function GET(request: NextRequest) {
 
         // Redirect to auth callback page with token and user data
         // We'll pass this via URL params which the client will immediately store in localStorage
-        const callbackUrl = new URL('/auth-callback', request.url)
+        const baseUrl = process.env.AUTH_URL || request.url
+        const callbackUrl = new URL('/auth-callback', baseUrl)
         callbackUrl.searchParams.set('token', sessionToken)
         callbackUrl.searchParams.set('user', JSON.stringify(userData))
 

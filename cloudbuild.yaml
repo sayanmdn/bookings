@@ -41,6 +41,7 @@ steps:
           AUTH_SECRET: "$$AUTH_SECRET"
           GOOGLE_CLIENT_ID: "$$GOOGLE_CLIENT_ID"
           GOOGLE_CLIENT_SECRET: "$$GOOGLE_CLIENT_SECRET"
+          GOOGLE_REDIRECT_URI: "https://sturdy-gamma-481722-c8.el.r.appspot.com/api/auth/callback/google"
 
         automatic_scaling:
           min_instances: 0

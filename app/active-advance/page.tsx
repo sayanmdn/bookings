@@ -1,74 +1,79 @@
+'use client'
+
+import ProtectedPage from '@/components/ProtectedPage';
 import Link from 'next/link';
 import BookingTable from '@/components/BookingTable';
 import Header from '@/components/Header';
-import dbConnect from '@/lib/mongodb';
-import Booking, { IBooking } from '@/lib/models/Booking';
+import { useEffect, useState } from 'react';
 
-// Disable caching for this page to always show fresh data
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-async function getActiveAdvanceReceivedBookings(): Promise<IBooking[]> {
-  try {
-    await dbConnect();
-
-    // Get current date at midnight for comparison
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const bookings = await Booking.find({
-      advanceReceived: true,
-      checkOut: { $gte: today }, // Check-out date is today or in the future
-      $or: [
-        { bookingStatus: 'active' },
-        { bookingStatus: { $exists: false } }
-      ]
-    }).sort({ checkOut: 1 }).lean();
-
-    return JSON.parse(JSON.stringify(bookings));
-  } catch (error) {
-    console.error('Error fetching active advance received bookings:', error);
-    return [];
-  }
+interface IBooking {
+  _id: string;
+  [key: string]: unknown;
 }
 
-export default async function ActiveAdvancePage() {
-  const bookings = await getActiveAdvanceReceivedBookings();
+export default function ActiveAdvancePage() {
+  const [bookings, setBookings] = useState<IBooking[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBookings() {
+      try {
+        const response = await fetch('/api/bookings/active-advance');
+        if (response.ok) {
+          const data = await response.json();
+          setBookings(data);
+        }
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBookings();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Active Bookings - Advance Received</h1>
-          <p className="text-gray-600">
-            Bookings with advance received and checkout date not passed - {bookings.length} total
-          </p>
-        </div>
+    <ProtectedPage>
+      <div className="min-h-screen bg-gray-100">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Active Bookings - Advance Received</h1>
+            <p className="text-gray-600">
+              {loading ? 'Loading...' : `Bookings with advance received and checkout date not passed - ${bookings.length} total`}
+            </p>
+          </div>
 
-        <div className="mb-6 flex gap-4">
-          <Link
-            href="/dashboard"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-          >
-            Home
-          </Link>
-          <Link
-            href="/bookings"
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-          >
-            All Bookings
-          </Link>
-          <Link
-            href="/advance-pending"
-            className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
-          >
-            Advance Pending
-          </Link>
-        </div>
+          <div className="mb-6 flex gap-4">
+            <Link
+              href="/dashboard"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              Home
+            </Link>
+            <Link
+              href="/bookings"
+              className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+            >
+              All Bookings
+            </Link>
+            <Link
+              href="/advance-pending"
+              className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+            >
+              Advance Pending
+            </Link>
+          </div>
 
-        <BookingTable bookings={bookings as never[]} showAdvanceAction={false} />
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+          ) : (
+            <BookingTable bookings={bookings as never[]} showAdvanceAction={false} />
+          )}
+        </div>
       </div>
-    </div>
+    </ProtectedPage>
   );
 }

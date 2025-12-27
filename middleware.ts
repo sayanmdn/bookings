@@ -1,31 +1,18 @@
-import { auth } from "@/auth"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from 'next/server'
 
-export default auth((req) => {
-  // Bypass authentication in development mode
-  if (process.env.NODE_ENV === 'development') {
+export function middleware(request: NextRequest) {
+  const isOnLoginPage = request.nextUrl.pathname.startsWith('/login')
+  const isOnLandingPage = request.nextUrl.pathname === '/'
+  const isOnAuthCallback = request.nextUrl.pathname.startsWith('/auth-callback')
+
+  // Allow public access to landing page and auth callback
+  if (isOnLandingPage || isOnAuthCallback) {
     return NextResponse.next()
   }
 
-  const isLoggedIn = !!req.auth
-  const isOnLoginPage = req.nextUrl.pathname.startsWith('/login')
-  const isOnLandingPage = req.nextUrl.pathname === '/'
-
-  // Allow public access to landing page
-  if (isOnLandingPage) {
-    return NextResponse.next()
-  }
-
-  if (!isLoggedIn && !isOnLoginPage) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
-  }
-
-  if (isLoggedIn && isOnLoginPage) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-  }
-
+  // All other pages will check authentication client-side
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],

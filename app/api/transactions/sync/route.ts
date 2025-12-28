@@ -38,7 +38,7 @@ function parseSBMTransaction(body: string, dateHeader: string) {
 
 export async function GET() {
     try {
-        const gmail = await getGmailClient();
+        const gmail = await getGmailClient('gmail_refresh_token');
 
         // List messages
         // Query specifically for SBM Bank emails to filter irrelevant ones

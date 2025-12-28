@@ -21,21 +21,22 @@ export const getOAuthClient = () => {
     return new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 };
 
-export const getAuthUrl = () => {
+export const getAuthUrl = (state?: string) => {
     const oauth2Client = getOAuthClient();
     return oauth2Client.generateAuthUrl({
         access_type: 'offline', // Crucial for receiving a refresh token
         scope: SCOPES,
         prompt: 'consent', // Force consent prompt to ensure we get a refresh token
+        state, // Pass state (e.g., JSON string of { type: 'bookings', returnUrl: '...' })
     });
 };
 
-export const getGmailClient = async () => {
+export const getGmailClient = async (tokenKey: string = 'gmail_refresh_token') => {
     await connectDB();
-    const setting = await SystemSetting.findOne({ key: 'gmail_refresh_token' });
+    const setting = await SystemSetting.findOne({ key: tokenKey });
 
     if (!setting || !setting.value) {
-        throw new Error('Gmail refresh token not found. Please authenticate first.');
+        throw new Error(`Gmail refresh token not found for key: ${tokenKey}. Please authenticate first.`);
     }
 
     const oauth2Client = getOAuthClient();

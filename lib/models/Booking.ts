@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
 export interface IBooking {
-  bookNumber: number;
+  bookNumber: string;
   bookedBy: string;
   guestNames?: string;
   checkIn: Date;
@@ -33,7 +33,7 @@ export interface IBooking {
 const BookingSchema = new Schema<IBooking>(
   {
     bookNumber: {
-      type: Number,
+      type: String,
       required: true,
       unique: true,
       index: true

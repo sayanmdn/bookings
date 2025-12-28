@@ -23,7 +23,7 @@ export default function TransactionsPage() {
 
             if (response.status === 401) {
                 // Auth required
-                window.location.href = '/api/gmail/auth';
+                window.location.href = '/api/gmail/auth?type=transactions';
                 return;
             }
 

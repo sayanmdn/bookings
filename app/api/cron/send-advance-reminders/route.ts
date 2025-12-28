@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
       total: pendingBookings.length,
       sent: 0,
       failed: 0,
-      errors: [] as Array<{ bookingId: string; bookNumber: number; error: string }>,
+      errors: [] as Array<{ bookingId: string; bookNumber: string; error: string }>,
     };
 
     // Send WhatsApp messages to all pending bookings

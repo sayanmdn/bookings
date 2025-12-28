@@ -14,6 +14,7 @@ export interface Booking {
     bookingStatus: 'active' | 'cancelled';
     unitType: string;
     advanceReceived: boolean;
+    price: string;
     // Add other fields as needed from your schema, but these are the required ones for display
 }
 
@@ -87,6 +88,10 @@ export default function BookingsList({ bookings }: BookingsListProps) {
                                         <p className="text-gray-400">Platform</p>
                                         <p className="font-medium text-gray-900">{booking.unitType || 'N/A'}</p>
                                     </div>
+                                    <div className="col-span-2">
+                                        <p className="text-gray-400">Amount</p>
+                                        <p className="font-medium text-gray-900">₹{booking.price}</p>
+                                    </div>
                                 </div>
                             </li>
                         );
@@ -112,6 +117,9 @@ export default function BookingsList({ bookings }: BookingsListProps) {
                                 Check-out
                             </th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Amount
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Names
                             </th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -135,6 +143,9 @@ export default function BookingsList({ bookings }: BookingsListProps) {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {formatDate(booking.checkOut)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        ₹{booking.price}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-500">
                                         <div className="flex flex-col">

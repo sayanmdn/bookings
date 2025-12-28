@@ -343,7 +343,7 @@ export default function InvoiceEditPage() {
                     onChange={handleInputChange}
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="0.00"
                   />
                   <p className="mt-1 text-xs text-gray-500">Enter the amount received from guest</p>
@@ -359,7 +359,7 @@ export default function InvoiceEditPage() {
                     value={formData.remarks}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     placeholder="Any additional notes or remarks"
                   />
                 </div>

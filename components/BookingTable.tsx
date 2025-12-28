@@ -259,30 +259,28 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm">
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    booking.status === 'confirmed'
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${booking.status === 'confirmed'
                       ? 'bg-green-100 text-green-800'
                       : 'bg-yellow-100 text-yellow-800'
-                  }`}
+                    }`}
                 >
                   {booking.status}
                 </span>
               </td>
               <td className="px-4 py-3 whitespace-nowrap text-sm">
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    booking.bookingStatus === 'cancelled'
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${booking.bookingStatus === 'cancelled'
                       ? 'bg-red-100 text-red-800'
                       : booking.advanceReceived
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-blue-100 text-blue-800'
-                  }`}
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-blue-100 text-blue-800'
+                    }`}
                 >
                   {booking.bookingStatus === 'cancelled'
                     ? 'Cancelled'
                     : booking.advanceReceived
-                    ? 'Advance Received'
-                    : 'Added'}
+                      ? 'Advance Received'
+                      : 'Added'}
                 </span>
               </td>
               {showAdvanceAction && (
@@ -293,7 +291,7 @@ export default function BookingTable({ bookings, showAdvanceAction = false }: Bo
                     value={amounts[booking._id] || ''}
                     onChange={(e) => handleAmountChange(booking._id, e.target.value)}
                     disabled={loadingId === booking._id}
-                    className="border border-gray-300 rounded px-2 py-1 w-32 text-sm disabled:opacity-50"
+                    className="border border-gray-300 rounded px-2 py-1 w-32 text-sm disabled:opacity-50 text-gray-900"
                   />
                 </td>
               )}

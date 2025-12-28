@@ -120,7 +120,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.district}
               onChange={(e) => handleInputChange('district', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., Purba Medinipur"
             />
           </div>
@@ -133,7 +133,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.assemblyName}
               onChange={(e) => handleInputChange('assemblyName', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., Contai"
             />
           </div>
@@ -146,7 +146,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.partNo}
               onChange={(e) => handleInputChange('partNo', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., 001"
             />
           </div>
@@ -159,7 +159,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.partName}
               onChange={(e) => handleInputChange('partName', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., Contai Gram Panchayat"
             />
           </div>
@@ -172,7 +172,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.bloName}
               onChange={(e) => handleInputChange('bloName', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., John Doe"
             />
           </div>
@@ -185,7 +185,7 @@ export default function BLOSearchForm() {
               type="text"
               value={filters.mobileNumber}
               onChange={(e) => handleInputChange('mobileNumber', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="e.g., 9876543210"
             />
           </div>

@@ -173,6 +173,22 @@ export default function DashboardPage() {
               </span>
             </Link>
 
+            <Link
+              href="/transactions"
+              className="block bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <FileText className="w-8 h-8 text-cyan-500" />
+                <h3 className="text-xl font-semibold text-gray-900">Transactions</h3>
+              </div>
+              <p className="text-gray-600 mb-4">
+                View complete list of all financial transactions
+              </p>
+              <span className="text-cyan-600 font-medium">
+                View transactions →
+              </span>
+            </Link>
+
             {(user?.role === 'ADMIN' || (user?.role as string) === 'ADMIN') && (
               <Link
                 href="/users"

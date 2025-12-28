@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Header from '@/components/Header';
 import ProtectedPage from '@/components/ProtectedPage';
 import { ITransaction } from '@/lib/models/Transaction';
@@ -10,27 +10,67 @@ import { format } from 'date-fns';
 export default function TransactionsPage() {
     const [transactions, setTransactions] = useState<ITransaction[]>([]);
     const [loading, setLoading] = useState(true);
+    const [syncing, setSyncing] = useState(false);
     const [error, setError] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
+
+    const handleSync = useCallback(async () => {
+        setSyncing(true);
+        setError('');
+        setSuccessMsg('');
+        try {
+            const response = await fetch('/api/transactions/sync');
+
+            if (response.status === 401) {
+                // Auth required
+                window.location.href = '/api/gmail/auth';
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error('Sync failed');
+            }
+
+            const data = await response.json();
+            setSuccessMsg(`Synced successfully! Added ${data.added} new transactions.`);
+            fetchTransactions(); // Refresh list
+        } catch (err) {
+            setError('Failed to sync transactions');
+            console.error(err);
+        } finally {
+            setSyncing(false);
+        }
+    }, []);
 
     useEffect(() => {
-        async function fetchTransactions() {
-            try {
-                const response = await fetch('/api/transactions');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch transactions');
-                }
-                const data = await response.json();
-                setTransactions(data);
-            } catch (err) {
-                setError('Error loading transactions');
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         fetchTransactions();
-    }, []);
+
+        // Check for sync success param
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('gmail_sync') === 'connected') {
+            setSuccessMsg('Gmail connected! Syncing transactions...');
+            handleSync();
+            window.history.replaceState({}, '', '/transactions');
+        }
+    }, [handleSync]);
+
+    async function fetchTransactions() {
+        try {
+            const response = await fetch('/api/transactions');
+            if (!response.ok) {
+                throw new Error('Failed to fetch transactions');
+            }
+            const data = await response.json();
+            setTransactions(data);
+        } catch (err) {
+            setError('Error loading transactions');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
 
     return (
         <ProtectedPage allowedRoles={['EDITOR', 'ADMIN']}>
@@ -39,7 +79,26 @@ export default function TransactionsPage() {
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold text-gray-900">Transactions</h1>
+                        <button
+                            onClick={handleSync}
+                            disabled={syncing}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors flex items-center gap-2 disabled:opacity-70"
+                        >
+                            {syncing ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M3 21v-5h5" /></svg>
+                            )}
+                            {syncing ? 'Syncing...' : 'Sync'}
+                        </button>
                     </div>
+
+                    {successMsg && (
+                        <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded flex justify-between items-center">
+                            <span>{successMsg}</span>
+                            <button onClick={() => setSuccessMsg('')} className="text-green-500 hover:text-green-700">×</button>
+                        </div>
+                    )}
 
                     {loading ? (
                         <div className="flex justify-center items-center h-64">
@@ -65,21 +124,15 @@ export default function TransactionsPage() {
                                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Description
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Category
-                                            </th>
+
                                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Method
                                             </th>
                                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Amount
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Type
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Status
-                                            </th>
+
+
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
@@ -91,9 +144,7 @@ export default function TransactionsPage() {
                                                 <td className="px-6 py-4 text-sm text-gray-900">
                                                     {transaction.description || '-'}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
-                                                    {transaction.category.replace('_', ' ')}
-                                                </td>
+
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
                                                     {transaction.paymentMethod.replace('_', ' ')}
                                                 </td>
@@ -101,19 +152,8 @@ export default function TransactionsPage() {
                                                     }`}>
                                                     {transaction.type === 'credit' ? '+' : '-'}₹{transaction.amount.toLocaleString()}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">
-                                                    {transaction.type}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${transaction.status === 'success'
-                                                            ? 'bg-green-100 text-green-800'
-                                                            : transaction.status === 'pending'
-                                                                ? 'bg-yellow-100 text-yellow-800'
-                                                                : 'bg-red-100 text-red-800'
-                                                        }`}>
-                                                        {transaction.status}
-                                                    </span>
-                                                </td>
+
+
                                             </tr>
                                         ))}
                                     </tbody>

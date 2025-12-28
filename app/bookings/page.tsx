@@ -1,24 +1,19 @@
-'use client'
+'use client';
 
-import ProtectedPage from '@/components/ProtectedPage';
 import Link from 'next/link';
-import BookingTable from '@/components/BookingTable';
+import ProtectedPage from '@/components/ProtectedPage';
+import BookingsList, { Booking } from '@/components/BookingsList';
 import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 
-interface IBooking {
-  _id: string;
-  [key: string]: unknown;
-}
-
 export default function AllBookingsPage() {
-  const [bookings, setBookings] = useState<IBooking[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBookings() {
       try {
-        const response = await fetch('/api/bookings/all');
+        const response = await fetch('/api/bookings/all?filter=future');
         if (response.ok) {
           const data = await response.json();
           setBookings(data);
@@ -32,12 +27,12 @@ export default function AllBookingsPage() {
     fetchBookings();
   }, []);
 
-  const advancePending = bookings.filter((b: IBooking) =>
+  const advancePending = bookings.filter((b) =>
     (b.advanceReceived as boolean) !== true &&
     ((b.bookingStatus as string) === 'active' || !(b.bookingStatus as string))
   ).length;
 
-  const advanceReceived = bookings.filter((b: IBooking) => (b.advanceReceived as boolean) === true).length;
+  const advanceReceived = bookings.filter((b) => (b.advanceReceived as boolean) === true).length;
 
   return (
     <ProtectedPage>
@@ -71,7 +66,7 @@ export default function AllBookingsPage() {
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
             </div>
           ) : (
-            <BookingTable bookings={bookings as never[]} showAdvanceAction={false} />
+            <BookingsList bookings={bookings} />
           )}
         </div>
       </div>

@@ -24,7 +24,16 @@ export class GoogleAuth {
     constructor() {
         this.clientId = process.env.GOOGLE_CLIENT_ID!
         this.clientSecret = process.env.GOOGLE_CLIENT_SECRET!
-        this.redirectUri = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/api/auth/callback/google'
+
+        if (process.env.GOOGLE_REDIRECT_URI) {
+            this.redirectUri = process.env.GOOGLE_REDIRECT_URI
+        } else if (process.env.AUTH_URL) {
+            // Remove trailing slash if present
+            const baseUrl = process.env.AUTH_URL.replace(/\/$/, '')
+            this.redirectUri = `${baseUrl}/api/auth/callback/google`
+        } else {
+            this.redirectUri = 'http://localhost:3000/api/auth/callback/google'
+        }
     }
 
     /**

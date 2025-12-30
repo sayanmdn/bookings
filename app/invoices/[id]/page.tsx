@@ -31,6 +31,11 @@ export default function InvoiceEditPage() {
 
   const [invoice, setInvoice] = useState<InvoiceData | null>(null);
   const [formData, setFormData] = useState({
+    roomType: '',
+    numberOfRooms: '',
+    numberOfGuests: '',
+    pricePerNight: '',
+    numberOfNights: '',
     advanceAmount: '',
     remarks: '',
   });
@@ -51,7 +56,13 @@ export default function InvoiceEditPage() {
       }
       const data = await response.json();
       setInvoice(data);
+      setInvoice(data);
       setFormData({
+        roomType: data.roomType,
+        numberOfRooms: data.numberOfRooms.toString(),
+        numberOfGuests: data.numberOfGuests.toString(),
+        pricePerNight: data.pricePerNight.toString(),
+        numberOfNights: data.numberOfNights.toString(),
         advanceAmount: data.advanceAmount?.toString() || '',
         remarks: data.remarks || '',
       });
@@ -71,10 +82,17 @@ export default function InvoiceEditPage() {
     }));
   };
 
+  const calculateTotal = () => {
+    const price = parseFloat(formData.pricePerNight) || 0;
+    const nights = parseFloat(formData.numberOfNights) || 0;
+    const rooms = parseFloat(formData.numberOfRooms) || 0;
+    return price * nights * rooms;
+  };
+
   const calculateBalance = () => {
-    if (!invoice) return 0;
+    const total = calculateTotal();
     const advance = parseFloat(formData.advanceAmount) || 0;
-    return invoice.totalAmount - advance;
+    return total - advance;
   };
 
   const handleRegeneratePDF = async (e: React.FormEvent) => {
@@ -87,6 +105,11 @@ export default function InvoiceEditPage() {
 
       // Update invoice data
       const updateData = {
+        roomType: formData.roomType,
+        numberOfRooms: parseInt(formData.numberOfRooms),
+        numberOfGuests: parseInt(formData.numberOfGuests),
+        pricePerNight: parseFloat(formData.pricePerNight),
+        numberOfNights: parseInt(formData.numberOfNights),
         advanceAmount: formData.advanceAmount ? parseFloat(formData.advanceAmount) : 0,
         remarks: formData.remarks,
       };
@@ -110,14 +133,14 @@ export default function InvoiceEditPage() {
         guestName: invoice.guestName,
         checkIn: invoice.checkIn,
         checkOut: invoice.checkOut,
-        roomType: invoice.roomType,
-        numberOfRooms: invoice.numberOfRooms,
-        numberOfGuests: invoice.numberOfGuests,
-        pricePerNight: invoice.pricePerNight,
-        numberOfNights: invoice.numberOfNights,
-        totalAmount: invoice.totalAmount,
+        roomType: updateData.roomType,
+        numberOfRooms: updateData.numberOfRooms,
+        numberOfGuests: updateData.numberOfGuests,
+        pricePerNight: updateData.pricePerNight,
+        numberOfNights: updateData.numberOfNights,
+        totalAmount: updateData.pricePerNight * updateData.numberOfNights * updateData.numberOfRooms,
         advanceAmount: updateData.advanceAmount,
-        balanceAmount: invoice.totalAmount - updateData.advanceAmount,
+        balanceAmount: (updateData.pricePerNight * updateData.numberOfNights * updateData.numberOfRooms) - updateData.advanceAmount,
         remarks: updateData.remarks,
       };
 
@@ -276,50 +299,77 @@ export default function InvoiceEditPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="roomType" className="block text-sm font-medium text-gray-700 mb-2">
                     Room Type
                   </label>
                   <input
                     type="text"
-                    value={invoice.roomType}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600 cursor-not-allowed"
+                    id="roomType"
+                    name="roomType"
+                    value={formData.roomType}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="numberOfRooms" className="block text-sm font-medium text-gray-700 mb-2">
                     Number of Rooms
                   </label>
                   <input
                     type="number"
-                    value={invoice.numberOfRooms}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600 cursor-not-allowed"
+                    id="numberOfRooms"
+                    name="numberOfRooms"
+                    value={formData.numberOfRooms}
+                    onChange={handleInputChange}
+                    min="1"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="numberOfGuests" className="block text-sm font-medium text-gray-700 mb-2">
                     Number of Guests
                   </label>
                   <input
                     type="number"
-                    value={invoice.numberOfGuests}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600 cursor-not-allowed"
+                    id="numberOfGuests"
+                    name="numberOfGuests"
+                    value={formData.numberOfGuests}
+                    onChange={handleInputChange}
+                    min="1"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="pricePerNight" className="block text-sm font-medium text-gray-700 mb-2">
                     Price Per Night (₹)
                   </label>
                   <input
-                    type="text"
-                    value={`₹${invoice.pricePerNight.toLocaleString('en-IN')}`}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600 cursor-not-allowed"
+                    type="number"
+                    id="pricePerNight"
+                    name="pricePerNight"
+                    value={formData.pricePerNight}
+                    onChange={handleInputChange}
+                    min="0"
+                    step="0.01"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="numberOfNights" className="block text-sm font-medium text-gray-700 mb-2">
+                    Number of Nights
+                  </label>
+                  <input
+                    type="number"
+                    id="numberOfNights"
+                    name="numberOfNights"
+                    value={formData.numberOfNights}
+                    onChange={handleInputChange}
+                    min="1"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                   />
                 </div>
               </div>
@@ -372,15 +422,15 @@ export default function InvoiceEditPage() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-700">Number of Nights:</span>
-                  <span className="font-medium">{invoice.numberOfNights}</span>
+                  <span className="font-medium">{formData.numberOfNights}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-700">Rate per Night:</span>
-                  <span className="font-medium">₹{invoice.pricePerNight.toLocaleString('en-IN')}</span>
+                  <span className="font-medium">₹{parseFloat(formData.pricePerNight).toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-blue-200">
                   <span>Total Amount:</span>
-                  <span>₹{invoice.totalAmount.toLocaleString('en-IN')}</span>
+                  <span>₹{calculateTotal().toLocaleString('en-IN')}</span>
                 </div>
                 {formData.advanceAmount && parseFloat(formData.advanceAmount) > 0 && (
                   <>

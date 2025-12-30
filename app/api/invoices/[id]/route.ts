@@ -54,19 +54,41 @@ export async function PATCH(
 
     console.log('Found invoice:', invoice.invoiceNumber);
 
-    // Update only editable fields
+    // Update editable fields
+    if (data.roomType !== undefined) invoice.roomType = data.roomType;
+    if (data.numberOfRooms !== undefined) invoice.numberOfRooms = data.numberOfRooms;
+    if (data.numberOfGuests !== undefined) invoice.numberOfGuests = data.numberOfGuests;
+    if (data.pricePerNight !== undefined) invoice.pricePerNight = data.pricePerNight;
+    if (data.numberOfNights !== undefined) invoice.numberOfNights = data.numberOfNights;
+    
+    // Recalculate total amount only if relevant fields changed
+    if (
+      data.numberOfRooms !== undefined || 
+      data.pricePerNight !== undefined || 
+      data.numberOfNights !== undefined
+    ) {
+      invoice.totalAmount = invoice.pricePerNight * invoice.numberOfNights * invoice.numberOfRooms;
+    }
+
     if (data.advanceAmount !== undefined) {
       invoice.advanceAmount = data.advanceAmount;
-      invoice.balanceAmount = invoice.totalAmount - data.advanceAmount;
+    }
 
-      // Update payment status
-      if (invoice.balanceAmount === 0) {
-        invoice.paymentStatus = 'paid';
-      } else if (data.advanceAmount > 0) {
-        invoice.paymentStatus = 'partial';
-      } else {
-        invoice.paymentStatus = 'pending';
-      }
+    // Always recalculate balance and status since total or advance might have changed
+    const advance = invoice.advanceAmount || 0;
+    invoice.balanceAmount = invoice.totalAmount - advance;
+
+    if (invoice.balanceAmount <= 0) {
+      invoice.paymentStatus = 'paid';
+      // Ensure strictly 0 if negative due to overpayment logic, though business logic might vary. 
+      // For now, keeping what was there or letting it be negative? 
+      // Previous logic: if (invoice.balanceAmount === 0) -> 'paid'.
+      // If balance < 0, it's also effectively paid (overpaid).
+      // Let's stick to <= 0 implies paid.
+    } else if (advance > 0) {
+      invoice.paymentStatus = 'partial';
+    } else {
+      invoice.paymentStatus = 'pending';
     }
 
     if (data.remarks !== undefined) {

@@ -233,6 +233,7 @@ export default function InvoicePage() {
                       <option value="">Select room type</option>
                       <option value="Single Bed in Mixed Dormitory Room">Single Bed in Mixed Dormitory Room</option>
                       <option value="Single Bed in Female Dormitory Room">Single Bed in Female Dormitory Room</option>
+                      <option value="Private Room">Private Room</option>
                     </select>
                   </div>
 

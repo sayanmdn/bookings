@@ -42,6 +42,24 @@ export const getGmailClient = async (tokenKey: string = 'gmail_refresh_token') =
     const oauth2Client = getOAuthClient();
     oauth2Client.setCredentials({ refresh_token: setting.value });
 
+    // Test the token by attempting to refresh it
+    try {
+        await oauth2Client.getAccessToken();
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('invalid_grant')) {
+            // Delete the invalid token from the database
+            await SystemSetting.deleteOne({ key: tokenKey });
+
+            const authType = tokenKey.includes('bookings') ? 'bookings' : 'transactions';
+            throw new Error(
+                `Gmail refresh token is invalid or expired. ` +
+                `Please re-authorize at: /api/gmail/auth?type=${authType}`
+            );
+        }
+        throw error;
+    }
+
     return google.gmail({ version: 'v1', auth: oauth2Client });
 };
 

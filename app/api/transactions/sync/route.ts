@@ -123,10 +123,16 @@ export async function GET() {
 
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        if (errorMessage.includes('refresh token')) {
-            return NextResponse.json({ error: 'Auth Required' }, { status: 401 });
-        }
         console.error('Sync Error:', error);
+
+        if (errorMessage.includes('refresh token') || errorMessage.includes('re-authorize')) {
+            return NextResponse.json({
+                error: 'Auth Required',
+                message: errorMessage,
+                authUrl: '/api/gmail/auth?type=transactions'
+            }, { status: 401 });
+        }
+
         return NextResponse.json({ error: 'Failed to sync transactions' }, { status: 500 });
     }
 }

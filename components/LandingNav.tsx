@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { isAuthenticated, clearAuth } from '@/lib/client/auth';
 import { useRouter } from 'next/navigation';
+import { Phone, X } from 'lucide-react';
 
 export default function LandingNav() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showContactsModal, setShowContactsModal] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -53,6 +55,13 @@ export default function LandingNav() {
                                 Go to Dashboard
                             </Link>
                             <button
+                                onClick={() => setShowContactsModal(true)}
+                                className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider flex items-center gap-2"
+                            >
+                                <Phone size={16} />
+                                Contacts
+                            </button>
+                            <button
                                 onClick={handleLogout}
                                 className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
                             >
@@ -77,6 +86,61 @@ export default function LandingNav() {
                     )}
                 </div>
             </div>
+
+            {/* Contacts Modal */}
+            {showContactsModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                    onClick={() => setShowContactsModal(false)}
+                >
+                    <div
+                        className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-2xl font-bold text-gray-800">Contact Us</h2>
+                            <button
+                                onClick={() => setShowContactsModal(false)}
+                                className="text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <a
+                                href="tel:07001671481"
+                                className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors group"
+                            >
+                                <div className="bg-indigo-600 p-3 rounded-full group-hover:bg-indigo-700 transition-colors">
+                                    <Phone className="text-white" size={20} />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600 font-medium">Primary Contact</p>
+                                    <p className="text-lg font-semibold text-gray-800">07001671481</p>
+                                </div>
+                            </a>
+
+                            <a
+                                href="tel:7001137041"
+                                className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                            >
+                                <div className="bg-gray-600 p-3 rounded-full group-hover:bg-gray-700 transition-colors">
+                                    <Phone className="text-white" size={20} />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600 font-medium">Secondary Contact</p>
+                                    <p className="text-lg font-semibold text-gray-800">7001137041</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <p className="mt-6 text-sm text-gray-500 text-center">
+                            Click on a number to call
+                        </p>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }

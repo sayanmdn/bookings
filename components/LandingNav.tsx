@@ -87,50 +87,52 @@ export default function LandingNav() {
 
             <nav className="fixed w-full z-50 top-0 transition-all duration-300 bg-white/10 backdrop-blur-md border-b border-white/20">
                 <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div className="text-2xl font-bold text-white tracking-tight drop-shadow-md">
-                    Pathfinders Nest
+                    <div className="text-2xl font-bold text-white tracking-tight drop-shadow-md">
+                        Pathfinders Nest
+                    </div>
+                    <div className="flex gap-4 items-center">
+                        <button
+                            onClick={() => setShowContactsModal(true)}
+                            className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider flex items-center gap-2"
+                        >
+                            <Phone size={16} />
+                            Contacts
+                        </button>
+                        {isLoggedIn ? (
+                            <>
+                                <Link
+                                    href="/dashboard"
+                                    className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider"
+                                >
+                                    Go to Dashboard
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    href="/signup"
+                                    className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
+                                >
+                                    Book Now
+                                </Link>
+                            </>
+                        )}
+                    </div>
                 </div>
-                <div className="flex gap-4 items-center">
-                    {isLoggedIn ? (
-                        <>
-                            <Link
-                                href="/dashboard"
-                                className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider"
-                            >
-                                Go to Dashboard
-                            </Link>
-                            <button
-                                onClick={() => setShowContactsModal(true)}
-                                className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider flex items-center gap-2"
-                            >
-                                <Phone size={16} />
-                                Contacts
-                            </button>
-                            <button
-                                onClick={handleLogout}
-                                className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
-                            >
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Link
-                                href="/login"
-                                className="px-5 py-2 text-white/90 font-medium hover:text-white transition-colors text-sm uppercase tracking-wider"
-                            >
-                                Login
-                            </Link>
-                            <Link
-                                href="/signup"
-                                className="px-6 py-2.5 bg-white text-indigo-900 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
-                            >
-                                Book Now
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </div>
+
+            </nav>
 
             {/* Contacts Modal */}
             {showContactsModal && (
@@ -198,7 +200,6 @@ export default function LandingNav() {
                     </div>
                 </div>
             )}
-            </nav>
         </>
     );
 }

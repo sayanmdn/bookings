@@ -90,11 +90,11 @@ export default function LandingNav() {
             {/* Contacts Modal */}
             {showContactsModal && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
                     onClick={() => setShowContactsModal(false)}
                 >
                     <div
-                        className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all"
+                        className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto transform transition-all"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex justify-between items-center mb-6">

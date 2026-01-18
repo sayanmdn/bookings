@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
 
 interface InvoiceData {
   invoiceNumber: string;
@@ -15,185 +15,236 @@ interface InvoiceData {
   totalAmount: number;
   advanceAmount?: number;
   balanceAmount?: number;
+
   remarks?: string;
+  userPhone?: string;
+  userEmail?: string;
+  guestPhone?: string;
+  guestEmail?: string;
+  id?: string;
 }
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
-    fontSize: 11,
+    backgroundColor: '#ffffff',
     fontFamily: 'Helvetica',
   },
-  header: {
+  container: {
+    padding: 40,
+    flex: 1,
+  },
+  headerContainer: {
+    backgroundColor: '#0f766e', // Deep Teal
+    padding: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 20,
-    borderBottom: 2,
-    borderBottomColor: '#2563eb',
-    paddingBottom: 15,
+    color: 'white',
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  headerRight: {
+    alignItems: 'flex-end',
   },
   companyName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#1e40af',
-    marginBottom: 5,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   companyDetails: {
-    fontSize: 10,
-    color: '#4b5563',
-    marginBottom: 3,
+    fontSize: 9,
+    opacity: 0.9,
+    marginBottom: 2,
+    lineHeight: 1.4,
+  },
+  mainContent: {
+    paddingHorizontal: 40,
   },
   invoiceTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: 'normal',
+    letterSpacing: 4,
+    marginBottom: 10,
+    opacity: 0.9,
     textAlign: 'right',
-    color: '#1f2937',
-    marginTop: -50,
   },
-  invoiceNumber: {
-    fontSize: 11,
+  invoiceMetaItem: {
+    fontSize: 10,
+    marginBottom: 4,
+    opacity: 0.9,
     textAlign: 'right',
-    color: '#6b7280',
-    marginTop: 5,
   },
-  section: {
-    marginTop: 20,
-    marginBottom: 15,
+  divider: {
+    height: 1,
+    backgroundColor: '#e2e8f0',
+    marginVertical: 20,
   },
   sectionTitle: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#1f2937',
-    backgroundColor: '#e5e7eb',
-    padding: 8,
+    color: '#0f766e', // Deep Teal
+    marginBottom: 15,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    borderBottom: 1,
+    borderBottomColor: '#0f766e',
+    paddingBottom: 5,
   },
-  row: {
+  gridTwoColumns: {
     flexDirection: 'row',
-    marginBottom: 8,
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  col: {
+    width: '48%',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
   },
   label: {
-    width: '40%',
+    fontSize: 9,
+    color: '#64748b', // Slate 500
+    width: 80,
     fontWeight: 'bold',
-    color: '#374151',
   },
   value: {
-    width: '60%',
-    color: '#1f2937',
+    fontSize: 10,
+    color: '#334155', // Slate 700
+    flex: 1,
   },
   table: {
-    marginTop: 20,
+    marginTop: 10,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    overflow: 'hidden',
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#1e40af',
-    color: '#ffffff',
+    backgroundColor: '#f1f5f9', // Slate 100
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+  },
+  tableHeaderCell: {
+    fontSize: 9,
     fontWeight: 'bold',
+    color: '#475569',
+    textTransform: 'uppercase',
   },
   tableRow: {
     flexDirection: 'row',
-    borderBottom: 1,
-    borderBottomColor: '#e5e7eb',
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
   },
-  tableCol1: {
+  colDesc: { width: '50%' },
+  colRate: { width: '25%', textAlign: 'right' },
+  colAmt: { width: '25%', textAlign: 'right' },
+
+  cellText: {
+    fontSize: 10,
+    color: '#334155',
+  },
+
+  summarySection: {
+    marginTop: 20,
+    alignSelf: 'flex-end',
     width: '50%',
   },
-  tableCol2: {
-    width: '25%',
-    textAlign: 'right',
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+    paddingHorizontal: 10,
   },
-  tableCol3: {
-    width: '25%',
-    textAlign: 'right',
+  summaryLabel: {
+    fontSize: 10,
+    color: '#64748b',
   },
-  totalSection: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 5,
+  summaryValue: {
+    fontSize: 10,
+    color: '#334155',
+    fontWeight: 'bold',
   },
   totalRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#f0fdfa', // Teal 50
+    borderRadius: 4,
   },
   totalLabel: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#374151',
+    color: '#0f766e',
   },
   totalValue: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#1f2937',
+    color: '#0f766e',
   },
-  grandTotalRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingTop: 10,
-    borderTop: 2,
-    borderTopColor: '#2563eb',
-  },
-  grandTotalLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#1e40af',
-  },
-  grandTotalValue: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#1e40af',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 40,
-    left: 40,
-    right: 40,
-    borderTop: 1,
-    borderTopColor: '#e5e7eb',
-    paddingTop: 15,
-  },
-  footerText: {
-    fontSize: 9,
-    color: '#6b7280',
-    textAlign: 'center',
-    marginBottom: 3,
-  },
-  remarksSection: {
-    marginTop: 15,
-    padding: 10,
-    backgroundColor: '#fef3c7',
-    borderLeft: 3,
+
+  remarksBox: {
+    marginTop: 30,
+    padding: 15,
+    backgroundColor: '#fffbeb', // Amber 50
+    borderRadius: 6,
+    borderLeftWidth: 3,
     borderLeftColor: '#f59e0b',
   },
   remarksTitle: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: 'bold',
-    color: '#92400e',
-    marginBottom: 5,
+    color: '#b45309',
+    marginBottom: 4,
   },
   remarksText: {
-    fontSize: 10,
-    color: '#78350f',
+    fontSize: 9,
+    color: '#92400e',
+    fontStyle: 'italic',
   },
+
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#f8fafc',
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e2e8f0',
+  },
+  footerText: {
+    fontSize: 8,
+    color: '#94a3b8',
+    textAlign: 'center',
+    marginBottom: 2,
+  },
+
   paidStamp: {
     position: 'absolute',
-    top: 120,
-    right: 60,
-    transform: 'rotate(-15deg)',
-    borderWidth: 4,
-    borderStyle: 'solid',
-    borderColor: '#10b981',
+    top: 250,
+    right: 80,
+    transform: 'rotate(-20deg)',
+    borderWidth: 3,
+    borderColor: '#10b981', // Emerald 500
     borderRadius: 8,
-    padding: '10 20',
-    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    padding: '8 20',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    zIndex: 10,
   },
-  paidStampText: {
-    fontSize: 32,
-    fontWeight: 'bold',
+  paidText: {
     color: '#10b981',
-    letterSpacing: 4,
+    fontSize: 24,
+    fontWeight: 'bold',
+    letterSpacing: 2,
   },
 });
 
@@ -216,110 +267,151 @@ const InvoiceTemplate: React.FC<{ data: InvoiceData }> = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* PAID Stamp - Only show if fully paid */}
-        {isPaid && (
-          <View style={styles.paidStamp}>
-            <Text style={styles.paidStampText}>PAID</Text>
+        {/* Full width colored header */}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.companyName}>{data.title}</Text>
+            <Text style={styles.companyDetails}>Darjeeling, West Bengal, India</Text>
+            <Text style={styles.companyDetails}>CIN: U55101WB2024PTC271411</Text>
+            <Text style={styles.companyDetails}>{data.userPhone || '+91-6297395048'} | {data.userEmail || 'official.hilledge@gmail.com'}</Text>
           </View>
-        )}
-
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.companyName}>{data.title}</Text>
-          <Text style={styles.companyDetails}>Darjeeling, West Bengal, India</Text>
-          <Text style={styles.companyDetails}>CIN: U55101WB2024PTC271411</Text>
-          <Text style={styles.companyDetails}>Phone: +91-7001137041 | Email: official.hilledge@gmail.com</Text>
-          <View>
+          <View style={styles.headerRight}>
             <Text style={styles.invoiceTitle}>INVOICE</Text>
-            <Text style={styles.invoiceNumber}>Invoice No: {data.invoiceNumber}</Text>
-            <Text style={styles.invoiceNumber}>Date: {formatDate(new Date().toISOString())}</Text>
+            <Text style={styles.invoiceMetaItem}>#{data.invoiceNumber}</Text>
+            <Text style={styles.invoiceMetaItem}>Date: {formatDate(new Date().toISOString())}</Text>
           </View>
         </View>
 
-        {/* Guest Details */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Guest Details</Text>
-          <View style={styles.row}>
-            <Text style={styles.label}>Guest Name:</Text>
-            <Text style={styles.value}>{data.guestName}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Check-in Date:</Text>
-            <Text style={styles.value}>{formatDate(data.checkIn)}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Check-out Date:</Text>
-            <Text style={styles.value}>{formatDate(data.checkOut)}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Number of Nights:</Text>
-            <Text style={styles.value}>{data.numberOfNights}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Number of Guests:</Text>
-            <Text style={styles.value}>{data.numberOfGuests}</Text>
-          </View>
-        </View>
+        <View style={styles.mainContent}>
+          {/* PAID Stamp */}
+          {isPaid && (
+            <View style={styles.paidStamp}>
+              <Text style={styles.paidText}>PAID IN FULL</Text>
+            </View>
+          )}
 
-        {/* Booking Details Table */}
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.tableCol1}>Description</Text>
-            <Text style={styles.tableCol2}>Rate</Text>
-            <Text style={styles.tableCol3}>Amount</Text>
+          {/* Details Grid */}
+          <View style={styles.gridTwoColumns}>
+            <View style={styles.col}>
+              <Text style={styles.sectionTitle}>Billed To</Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>GUEST NAME</Text>
+                <Text style={styles.value}>{data.guestName}</Text>
+              </View>
+              {data.guestPhone && (
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>PHONE</Text>
+                  <Text style={styles.value}>{data.guestPhone}</Text>
+                </View>
+              )}
+              {data.guestEmail && (
+                <View style={styles.infoRow}>
+                  <Text style={styles.label}>EMAIL</Text>
+                  <Text style={styles.value}>{data.guestEmail}</Text>
+                </View>
+              )}
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>GUESTS</Text>
+                <Text style={styles.value}>{data.numberOfGuests} Person(s)</Text>
+              </View>
+            </View>
+            <View style={styles.col}>
+              <Text style={styles.sectionTitle}>Stay Details</Text>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>CHECK-IN</Text>
+                <Text style={styles.value}>{formatDate(data.checkIn)}</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>CHECK-OUT</Text>
+                <Text style={styles.value}>{formatDate(data.checkOut)}</Text>
+              </View>
+              <View style={styles.infoRow}>
+                <Text style={styles.label}>DURATION</Text>
+                <Text style={styles.value}>{data.numberOfNights} Night(s)</Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.tableRow}>
-            <Text style={styles.tableCol1}>
-              {data.roomType} ({data.numberOfRooms} room{data.numberOfRooms > 1 ? 's' : ''})
-            </Text>
-            <Text style={styles.tableCol2}>{formatCurrency(data.pricePerNight)}/night</Text>
-            <Text style={styles.tableCol3}>{formatCurrency(data.pricePerNight * data.numberOfNights)}</Text>
-          </View>
-        </View>
 
-        {/* Total Section */}
-        <View style={styles.totalSection}>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Subtotal:</Text>
-            <Text style={styles.totalValue}>{formatCurrency(data.totalAmount)}</Text>
+          {/* Table */}
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderCell, styles.colDesc]}>Description</Text>
+              <Text style={[styles.tableHeaderCell, styles.colRate]}>Rate Details</Text>
+              <Text style={[styles.tableHeaderCell, styles.colAmt]}>Amount</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.colDesc}>
+                <Text style={{ ...styles.cellText, fontWeight: 'bold' }}>{data.roomType}</Text>
+                <Text style={{ fontSize: 8, color: '#64748b', marginTop: 2 }}>
+                  {data.numberOfRooms} Room(s) × {data.numberOfNights} Night(s)
+                </Text>
+              </View>
+              <Text style={[styles.cellText, styles.colRate]}>
+                {formatCurrency(data.pricePerNight)} / night
+              </Text>
+              <Text style={[styles.cellText, styles.colAmt]}>
+                {formatCurrency(data.pricePerNight * data.numberOfRooms * data.numberOfNights)}
+              </Text>
+            </View>
           </View>
-          {data.advanceAmount !== undefined && data.advanceAmount > 0 && (
+
+          {/* Summary */}
+          <View style={styles.summarySection}>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Subtotal</Text>
+              <Text style={styles.summaryValue}>{formatCurrency(data.totalAmount)}</Text>
+            </View>
+
+            {data.advanceAmount !== undefined && data.advanceAmount > 0 && (
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>Advance Paid</Text>
+                <Text style={[styles.summaryValue, { color: '#0f766e' }]}>
+                  - {formatCurrency(data.advanceAmount)}
+                </Text>
+              </View>
+            )}
+
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Advance Paid:</Text>
-              <Text style={styles.totalValue}>- {formatCurrency(data.advanceAmount)}</Text>
+              <Text style={styles.totalLabel}>
+                {(!data.balanceAmount || data.balanceAmount === 0) ? 'Total Amount' : 'Balance Due'}
+              </Text>
+              <Text style={styles.totalValue}>
+                {formatCurrency((!data.balanceAmount || data.balanceAmount === 0) ? data.totalAmount : data.balanceAmount)}
+              </Text>
             </View>
-          )}
-          {data.balanceAmount !== undefined && (
-            <View style={styles.grandTotalRow}>
-              <Text style={styles.grandTotalLabel}>Balance Due:</Text>
-              <Text style={styles.grandTotalValue}>{formatCurrency(data.balanceAmount)}</Text>
-            </View>
-          )}
-          {(!data.balanceAmount || data.balanceAmount === 0) && (
-            <View style={styles.grandTotalRow}>
-              <Text style={styles.grandTotalLabel}>Total Amount:</Text>
-              <Text style={styles.grandTotalValue}>{formatCurrency(data.totalAmount)}</Text>
+          </View>
+
+          {/* Remarks */}
+          {data.remarks && (
+            <View style={styles.remarksBox}>
+              <Text style={styles.remarksTitle}>Notes / Remarks</Text>
+              <Text style={styles.remarksText}>{data.remarks}</Text>
             </View>
           )}
         </View>
-
-        {/* Remarks */}
-        {data.remarks && (
-          <View style={styles.remarksSection}>
-            <Text style={styles.remarksTitle}>Remarks:</Text>
-            <Text style={styles.remarksText}>{data.remarks}</Text>
-          </View>
-        )}
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Thank you for choosing Pathfinders Nest!</Text>
-          <Text style={styles.footerText}>
-            This is a computer-generated invoice and does not require a signature.
-          </Text>
+          <Text style={styles.footerText}>Thank you for choosing us for your stay in the mountains!</Text>
+          <Text style={styles.footerText}>Secure your next adventure with us.</Text>
           <Text style={styles.footerText}>
             For any queries, please contact us at official.hilledge@gmail.com
           </Text>
+          <Text style={{ ...styles.footerText, marginTop: 5, fontSize: 7, marginBottom: 5 }}>
+            This is a computer-generated invoice and needs no signature.
+          </Text>
+
+          {data.id && (
+            <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'center' }}>
+              <Text style={styles.footerText}>Verify at: </Text>
+              <Link
+                src={`https://pathfindersnesthostel.com/api/invoices/${data.id}`}
+                style={{ ...styles.footerText, color: '#0f766e', textDecoration: 'underline' }}
+              >
+                https://pathfindersnesthostel.com/api/invoices/{data.id}
+              </Link>
+            </View>
+          )}
         </View>
       </Page>
     </Document>

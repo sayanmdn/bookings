@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const numberOfNights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
 
     // Calculate amounts
-    const totalAmount = data.pricePerNight * numberOfNights;
+    const totalAmount = data.pricePerNight * data.numberOfRooms * numberOfNights;
     const advanceAmount = data.advanceAmount || 0;
     const balanceAmount = totalAmount - advanceAmount;
 
@@ -53,6 +53,10 @@ export async function POST(request: NextRequest) {
       balanceAmount,
       paymentStatus: balanceAmount === 0 ? 'paid' : advanceAmount > 0 ? 'partial' : 'pending',
       remarks: data.remarks || '',
+      userPhone: data.userPhone,
+      userEmail: data.userEmail,
+      guestPhone: data.guestPhone,
+      guestEmail: data.guestEmail,
     });
 
     // Prepare data for PDF
@@ -71,6 +75,11 @@ export async function POST(request: NextRequest) {
       advanceAmount: invoice.advanceAmount,
       balanceAmount: invoice.balanceAmount,
       remarks: invoice.remarks,
+      userPhone: data.userPhone,
+      userEmail: data.userEmail,
+      guestPhone: data.guestPhone,
+      guestEmail: data.guestEmail,
+      id: invoice._id.toString(),
     };
 
     // Generate PDF

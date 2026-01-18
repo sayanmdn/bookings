@@ -17,6 +17,10 @@ export interface IInvoice {
   balanceAmount?: number;
   paymentStatus: 'paid' | 'pending' | 'partial';
   remarks?: string;
+  userPhone?: string;
+  userEmail?: string;
+  guestPhone?: string;
+  guestEmail?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -47,6 +51,10 @@ const InvoiceSchema = new Schema<IInvoice>(
       default: 'pending'
     },
     remarks: { type: String },
+    userPhone: { type: String },
+    userEmail: { type: String },
+    guestPhone: { type: String },
+    guestEmail: { type: String },
   },
   {
     timestamps: true,

@@ -17,6 +17,10 @@ export default function InvoicePage() {
     pricePerNight: '',
     advanceAmount: '',
     remarks: '',
+    userPhone: '',
+    userEmail: '',
+    guestPhone: '',
+    guestEmail: '',
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -24,6 +28,13 @@ export default function InvoicePage() {
   const [availableTitles, setAvailableTitles] = useState<string[]>(['PATHFINDERS NEST']);
   const [selectedTitle, setSelectedTitle] = useState('PATHFINDERS NEST');
   const [customTitle, setCustomTitle] = useState('');
+  const [availableRoomTypes, setAvailableRoomTypes] = useState<string[]>([
+    'Single Bed in Mixed Dormitory Room',
+    'Single Bed in Female Dormitory Room',
+    'Private Room',
+  ]);
+  const [selectedRoomType, setSelectedRoomType] = useState('');
+  const [customRoomType, setCustomRoomType] = useState('');
 
   // Fetch available titles on mount
   useEffect(() => {
@@ -39,6 +50,26 @@ export default function InvoicePage() {
       }
     };
     fetchTitles();
+  }, []);
+
+  // Fetch available room types on mount
+  useEffect(() => {
+    const fetchRoomTypes = async () => {
+      try {
+        const response = await fetch('/api/invoice/room-types');
+        if (response.ok) {
+          const data = await response.json();
+          setAvailableRoomTypes(data.roomTypes || [
+            'Single Bed in Mixed Dormitory Room',
+            'Single Bed in Female Dormitory Room',
+            'Private Room',
+          ]);
+        }
+      } catch (err) {
+        console.error('Error fetching room types:', err);
+      }
+    };
+    fetchRoomTypes();
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -62,7 +93,8 @@ export default function InvoicePage() {
   const calculateTotal = () => {
     const nights = calculateNights();
     const pricePerNight = parseFloat(formData.pricePerNight) || 0;
-    return nights * pricePerNight;
+    const numberOfRooms = parseInt(formData.numberOfRooms.toString()) || 1;
+    return nights * pricePerNight * numberOfRooms;
   };
 
   const calculateBalance = () => {
@@ -90,12 +122,16 @@ export default function InvoicePage() {
         guestName: formData.guestName,
         checkIn: formData.checkIn,
         checkOut: formData.checkOut,
-        roomType: formData.roomType,
+        roomType: selectedRoomType === 'Others' ? customRoomType : selectedRoomType,
         numberOfRooms: parseInt(formData.numberOfRooms.toString()),
         numberOfGuests: parseInt(formData.numberOfGuests.toString()),
         pricePerNight: parseFloat(formData.pricePerNight),
         advanceAmount: formData.advanceAmount ? parseFloat(formData.advanceAmount) : 0,
         remarks: formData.remarks,
+        userPhone: formData.userPhone,
+        userEmail: formData.userEmail,
+        guestPhone: formData.guestPhone,
+        guestEmail: formData.guestEmail,
       };
 
       // Call API to generate invoice
@@ -134,15 +170,32 @@ export default function InvoicePage() {
         pricePerNight: '',
         advanceAmount: '',
         remarks: '',
+        userPhone: '',
+        userEmail: '',
+        guestPhone: '',
+        guestEmail: '',
       });
       setSelectedTitle('PATHFINDERS NEST');
       setCustomTitle('');
+      setSelectedRoomType('');
+      setCustomRoomType('');
 
       // Refresh available titles to include newly created title
       const titlesResponse = await fetch('/api/invoice/titles');
       if (titlesResponse.ok) {
         const titlesData = await titlesResponse.json();
         setAvailableTitles(titlesData.titles || ['PATHFINDERS NEST']);
+      }
+
+      // Refresh available room types to include newly created room type
+      const roomTypesResponse = await fetch('/api/invoice/room-types');
+      if (roomTypesResponse.ok) {
+        const roomTypesData = await roomTypesResponse.json();
+        setAvailableRoomTypes(roomTypesData.roomTypes || [
+          'Single Bed in Mixed Dormitory Room',
+          'Single Bed in Female Dormitory Room',
+          'Private Room',
+        ]);
       }
 
       alert('Invoice generated successfully!');
@@ -238,6 +291,43 @@ export default function InvoicePage() {
                 </div>
               </div>
 
+              {/* Host/User Contact Details (Optional) */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b">
+                  Host/User Contact Details (Optional)
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="userPhone" className="block text-sm font-medium text-gray-700 mb-2">
+                      Host Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="userPhone"
+                      name="userPhone"
+                      value={formData.userPhone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                      placeholder="e.g. +91 9876543210"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="userEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                      Host Email
+                    </label>
+                    <input
+                      type="email"
+                      id="userEmail"
+                      name="userEmail"
+                      value={formData.userEmail}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                      placeholder="e.g. host@example.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Guest Information */}
               <div className="mb-8">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b">
@@ -258,6 +348,37 @@ export default function InvoicePage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                       placeholder="Enter guest name"
                     />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="guestPhone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Guest Phone (Optional)
+                      </label>
+                      <input
+                        type="tel"
+                        id="guestPhone"
+                        name="guestPhone"
+                        value={formData.guestPhone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        placeholder="Enter guest phone"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="guestEmail" className="block text-sm font-medium text-gray-700 mb-2">
+                        Guest Email (Optional)
+                      </label>
+                      <input
+                        type="email"
+                        id="guestEmail"
+                        name="guestEmail"
+                        value={formData.guestEmail}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        placeholder="Enter guest email"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -305,17 +426,43 @@ export default function InvoicePage() {
                     <select
                       id="roomType"
                       name="roomType"
-                      value={formData.roomType}
-                      onChange={handleInputChange}
+                      value={selectedRoomType}
+                      onChange={(e) => {
+                        setSelectedRoomType(e.target.value);
+                        if (e.target.value !== 'Others') {
+                          setCustomRoomType('');
+                        }
+                      }}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     >
                       <option value="">Select room type</option>
-                      <option value="Single Bed in Mixed Dormitory Room">Single Bed in Mixed Dormitory Room</option>
-                      <option value="Single Bed in Female Dormitory Room">Single Bed in Female Dormitory Room</option>
-                      <option value="Private Room">Private Room</option>
+                      {availableRoomTypes.map((roomType) => (
+                        <option key={roomType} value={roomType}>
+                          {roomType}
+                        </option>
+                      ))}
+                      <option value="Others">Others (Custom Room Type)</option>
                     </select>
                   </div>
+
+                  {selectedRoomType === 'Others' && (
+                    <div>
+                      <label htmlFor="customRoomType" className="block text-sm font-medium text-gray-700 mb-2">
+                        Custom Room Type *
+                      </label>
+                      <input
+                        type="text"
+                        id="customRoomType"
+                        name="customRoomType"
+                        value={customRoomType}
+                        onChange={(e) => setCustomRoomType(e.target.value)}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        placeholder="Enter custom room type"
+                      />
+                    </div>
+                  )}
 
                   <div>
                     <label htmlFor="numberOfRooms" className="block text-sm font-medium text-gray-700 mb-2">
@@ -351,7 +498,7 @@ export default function InvoicePage() {
 
                   <div>
                     <label htmlFor="pricePerNight" className="block text-sm font-medium text-gray-700 mb-2">
-                      Price Per Night (₹) *
+                      Price Per Room Per Night (₹) *
                     </label>
                     <input
                       type="number"
@@ -420,7 +567,11 @@ export default function InvoicePage() {
                       <span className="font-medium">{nights}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-700">Rate per Night:</span>
+                      <span className="text-gray-700">Number of Rooms:</span>
+                      <span className="font-medium">{formData.numberOfRooms}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">Rate per Room per Night:</span>
                       <span className="font-medium">₹{parseFloat(formData.pricePerNight).toLocaleString('en-IN')}</span>
                     </div>
                     <div className="flex justify-between text-lg font-semibold pt-2 border-t border-blue-200">

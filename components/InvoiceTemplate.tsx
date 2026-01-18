@@ -405,10 +405,10 @@ const InvoiceTemplate: React.FC<{ data: InvoiceData }> = ({ data }) => {
             <View style={{ marginTop: 5, flexDirection: 'row', justifyContent: 'center' }}>
               <Text style={styles.footerText}>Verify at: </Text>
               <Link
-                src={`https://pathfindersnesthostel.com/api/invoices/${data.id}`}
+                src={`https://pathfindersnest.com/api/invoices/${data.id}`}
                 style={{ ...styles.footerText, color: '#0f766e', textDecoration: 'underline' }}
               >
-                https://pathfindersnesthostel.com/api/invoices/{data.id}
+                https://pathfindersnest.com/api/invoices/{data.id}
               </Link>
             </View>
           )}

@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
     // Save invoice to database
     const invoice = await Invoice.create({
       invoiceNumber,
+      title: data.title || 'PATHFINDERS NEST',
       guestName: data.guestName,
       checkIn: checkIn,
       checkOut: checkOut,
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
     // Prepare data for PDF
     const pdfData = {
       invoiceNumber: invoice.invoiceNumber,
+      title: invoice.title,
       guestName: invoice.guestName,
       checkIn: invoice.checkIn.toISOString(),
       checkOut: invoice.checkOut.toISOString(),

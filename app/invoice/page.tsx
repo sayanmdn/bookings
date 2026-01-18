@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProtectedPage from '@/components/ProtectedPage';
 import InvoiceHeader from '@/components/InvoiceHeader';
 import Link from 'next/link';
@@ -21,6 +21,25 @@ export default function InvoicePage() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
+  const [availableTitles, setAvailableTitles] = useState<string[]>(['PATHFINDERS NEST']);
+  const [selectedTitle, setSelectedTitle] = useState('PATHFINDERS NEST');
+  const [customTitle, setCustomTitle] = useState('');
+
+  // Fetch available titles on mount
+  useEffect(() => {
+    const fetchTitles = async () => {
+      try {
+        const response = await fetch('/api/invoice/titles');
+        if (response.ok) {
+          const data = await response.json();
+          setAvailableTitles(data.titles || ['PATHFINDERS NEST']);
+        }
+      } catch (err) {
+        console.error('Error fetching titles:', err);
+      }
+    };
+    fetchTitles();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -67,6 +86,7 @@ export default function InvoicePage() {
 
       // Prepare data
       const invoiceData = {
+        title: selectedTitle === 'Others' ? customTitle : selectedTitle,
         guestName: formData.guestName,
         checkIn: formData.checkIn,
         checkOut: formData.checkOut,
@@ -115,6 +135,15 @@ export default function InvoicePage() {
         advanceAmount: '',
         remarks: '',
       });
+      setSelectedTitle('PATHFINDERS NEST');
+      setCustomTitle('');
+
+      // Refresh available titles to include newly created title
+      const titlesResponse = await fetch('/api/invoice/titles');
+      if (titlesResponse.ok) {
+        const titlesData = await titlesResponse.json();
+        setAvailableTitles(titlesData.titles || ['PATHFINDERS NEST']);
+      }
 
       alert('Invoice generated successfully!');
     } catch (err) {
@@ -157,6 +186,57 @@ export default function InvoicePage() {
                   <p className="text-red-800">{error}</p>
                 </div>
               )}
+
+              {/* Invoice Settings */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b">
+                  Invoice Settings
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="invoiceTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                      Invoice Title *
+                    </label>
+                    <select
+                      id="invoiceTitle"
+                      name="invoiceTitle"
+                      value={selectedTitle}
+                      onChange={(e) => {
+                        setSelectedTitle(e.target.value);
+                        if (e.target.value !== 'Others') {
+                          setCustomTitle('');
+                        }
+                      }}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                    >
+                      {availableTitles.map((title) => (
+                        <option key={title} value={title}>
+                          {title}
+                        </option>
+                      ))}
+                      <option value="Others">Others (Custom Title)</option>
+                    </select>
+                  </div>
+                  {selectedTitle === 'Others' && (
+                    <div>
+                      <label htmlFor="customTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                        Custom Title *
+                      </label>
+                      <input
+                        type="text"
+                        id="customTitle"
+                        name="customTitle"
+                        value={customTitle}
+                        onChange={(e) => setCustomTitle(e.target.value)}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
+                        placeholder="Enter custom invoice title"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* Guest Information */}
               <div className="mb-8">

@@ -3,6 +3,7 @@ import mongoose, { Schema, Model } from 'mongoose';
 export interface IInvoice {
   _id?: mongoose.Types.ObjectId;
   invoiceNumber: string;
+  title: string;
   guestName: string;
   checkIn: Date;
   checkOut: Date;
@@ -28,6 +29,7 @@ const InvoiceSchema = new Schema<IInvoice>(
       unique: true,
       index: true
     },
+    title: { type: String, default: 'PATHFINDERS NEST' },
     guestName: { type: String, required: true },
     checkIn: { type: Date, required: true },
     checkOut: { type: Date, required: true },

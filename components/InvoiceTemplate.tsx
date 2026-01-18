@@ -3,6 +3,7 @@ import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 interface InvoiceData {
   invoiceNumber: string;
+  title: string;
   guestName: string;
   checkIn: string;
   checkOut: string;
@@ -224,7 +225,7 @@ const InvoiceTemplate: React.FC<{ data: InvoiceData }> = ({ data }) => {
 
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.companyName}>PATHFINDERS NEST</Text>
+          <Text style={styles.companyName}>{data.title}</Text>
           <Text style={styles.companyDetails}>Darjeeling, West Bengal, India</Text>
           <Text style={styles.companyDetails}>CIN: U55101WB2024PTC271411</Text>
           <Text style={styles.companyDetails}>Phone: +91-7001137041 | Email: official.hilledge@gmail.com</Text>

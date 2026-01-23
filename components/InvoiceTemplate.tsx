@@ -272,7 +272,6 @@ const InvoiceTemplate: React.FC<{ data: InvoiceData }> = ({ data }) => {
           <View style={styles.headerLeft}>
             <Text style={styles.companyName}>{data.title}</Text>
             <Text style={styles.companyDetails}>Darjeeling, West Bengal, India</Text>
-            <Text style={styles.companyDetails}>CIN: U55101WB2024PTC271411</Text>
             <Text style={styles.companyDetails}>{data.userPhone || '+91-6297395048'} | {data.userEmail || 'official.hilledge@gmail.com'}</Text>
           </View>
           <View style={styles.headerRight}>

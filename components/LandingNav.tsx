@@ -79,10 +79,6 @@ export default function LandingNav() {
                     <meta itemProp="contactType" content="customer service" />
                     <a href="tel:+917001671481" itemProp="telephone">+91-700-167-1481</a>
                 </div>
-                <div itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
-                    <meta itemProp="contactType" content="customer service" />
-                    <a href="tel:+917001137041" itemProp="telephone">+91-700-113-7041</a>
-                </div>
             </div>
 
             <nav className="fixed w-full z-50 top-0 transition-all duration-300 bg-white/10 backdrop-blur-md border-b border-white/20">

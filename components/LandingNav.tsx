@@ -46,19 +46,26 @@ export default function LandingNav() {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Pathfinders Nest",
-            "telephone": "+91-700-167-1481",
+            "telephone": "+91-839-188-7973",
             "contactPoint": [
                 {
                     "@type": "ContactPoint",
-                    "telephone": "+91-700-167-1481",
+                    "telephone": "+91-839-188-7973",
                     "contactType": "customer service",
                     "areaServed": "IN",
                     "availableLanguage": ["English", "Hindi"]
                 },
                 {
                     "@type": "ContactPoint",
-                    "telephone": "+91-700-167-1481",
+                    "telephone": "+91-839-188-7973",
                     "contactType": "reservations",
+                    "areaServed": "IN",
+                    "availableLanguage": ["English", "Hindi"]
+                },
+                {
+                    "@type": "ContactPoint",
+                    "telephone": "+91-700-167-1481",
+                    "contactType": "customer service",
                     "areaServed": "IN",
                     "availableLanguage": ["English", "Hindi"]
                 }
@@ -68,14 +75,23 @@ export default function LandingNav() {
             "@context": "https://schema.org",
             "@type": "LodgingBusiness",
             "name": "Pathfinders Nest",
-            "telephone": "+91-700-167-1481",
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+91-700-167-1481",
-                "contactType": "reservations",
-                "areaServed": "IN",
-                "availableLanguage": ["English", "Hindi"]
-            }
+            "telephone": "+91-839-188-7973",
+            "contactPoint": [
+                {
+                    "@type": "ContactPoint",
+                    "telephone": "+91-839-188-7973",
+                    "contactType": "reservations",
+                    "areaServed": "IN",
+                    "availableLanguage": ["English", "Hindi"]
+                },
+                {
+                    "@type": "ContactPoint",
+                    "telephone": "+91-700-167-1481",
+                    "contactType": "customer service",
+                    "areaServed": "IN",
+                    "availableLanguage": ["English", "Hindi"]
+                }
+            ]
         }
     ];
 
@@ -91,14 +107,19 @@ export default function LandingNav() {
             {/* Hidden contact info for SEO - Always in DOM for crawlers */}
             <div className="sr-only" itemScope itemType="https://schema.org/Organization">
                 <span itemProp="name">Pathfinders Nest</span>
-                <meta itemProp="telephone" content="+91-700-167-1481" />
+                <meta itemProp="telephone" content="+91-839-188-7973" />
                 <div itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
                     <meta itemProp="contactType" content="customer service" />
                     <meta itemProp="areaServed" content="IN" />
-                    <a href="tel:+917001671481" itemProp="telephone">+91-700-167-1481</a>
+                    <a href="tel:+918391887973" itemProp="telephone">+91-839-188-7973</a>
                 </div>
                 <div itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
                     <meta itemProp="contactType" content="reservations" />
+                    <meta itemProp="areaServed" content="IN" />
+                    <a href="tel:+918391887973" itemProp="telephone">+91-839-188-7973</a>
+                </div>
+                <div itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
+                    <meta itemProp="contactType" content="customer service" />
                     <meta itemProp="areaServed" content="IN" />
                     <a href="tel:+917001671481" itemProp="telephone">+91-700-167-1481</a>
                 </div>
@@ -183,16 +204,30 @@ export default function LandingNav() {
 
                         <div className="space-y-4">
                             <a
-                                href="tel:+917001671481"
+                                href="tel:+918391887973"
                                 className="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors group"
                                 itemProp="telephone"
-                                aria-label="Call contact number"
+                                aria-label="Call primary contact number"
                             >
                                 <div className="bg-indigo-600 p-3 rounded-full group-hover:bg-indigo-700 transition-colors">
                                     <Phone className="text-white" size={20} aria-hidden="true" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 font-medium">Contact</p>
+                                    <p className="text-sm text-gray-600 font-medium">Primary Contact</p>
+                                    <p className="text-lg font-semibold text-gray-800">+91-839-188-7973</p>
+                                </div>
+                            </a>
+                            <a
+                                href="tel:+917001671481"
+                                className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                                itemProp="telephone"
+                                aria-label="Call secondary contact number"
+                            >
+                                <div className="bg-gray-600 p-3 rounded-full group-hover:bg-gray-700 transition-colors">
+                                    <Phone className="text-white" size={20} aria-hidden="true" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600 font-medium">Alternate Contact</p>
                                     <p className="text-lg font-semibold text-gray-800">+91-700-167-1481</p>
                                 </div>
                             </a>

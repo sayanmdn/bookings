@@ -62,13 +62,6 @@ export default function LandingNav() {
                     "areaServed": "IN",
                     "availableLanguage": ["English", "Hindi"]
                 },
-                {
-                    "@type": "ContactPoint",
-                    "telephone": "+91-700-167-1481",
-                    "contactType": "customer service",
-                    "areaServed": "IN",
-                    "availableLanguage": ["English", "Hindi"]
-                }
             ]
         },
         {
@@ -86,7 +79,7 @@ export default function LandingNav() {
                 },
                 {
                     "@type": "ContactPoint",
-                    "telephone": "+91-700-167-1481",
+                    "telephone": "+91-839-188-7973",
                     "contactType": "customer service",
                     "areaServed": "IN",
                     "availableLanguage": ["English", "Hindi"]
@@ -117,11 +110,6 @@ export default function LandingNav() {
                     <meta itemProp="contactType" content="reservations" />
                     <meta itemProp="areaServed" content="IN" />
                     <a href="tel:+918391887973" itemProp="telephone">+91-839-188-7973</a>
-                </div>
-                <div itemProp="contactPoint" itemScope itemType="https://schema.org/ContactPoint">
-                    <meta itemProp="contactType" content="customer service" />
-                    <meta itemProp="areaServed" content="IN" />
-                    <a href="tel:+917001671481" itemProp="telephone">+91-700-167-1481</a>
                 </div>
             </div>
 
@@ -215,20 +203,6 @@ export default function LandingNav() {
                                 <div>
                                     <p className="text-sm text-gray-600 font-medium">Primary Contact</p>
                                     <p className="text-lg font-semibold text-gray-800">+91-839-188-7973</p>
-                                </div>
-                            </a>
-                            <a
-                                href="tel:+917001671481"
-                                className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
-                                itemProp="telephone"
-                                aria-label="Call secondary contact number"
-                            >
-                                <div className="bg-gray-600 p-3 rounded-full group-hover:bg-gray-700 transition-colors">
-                                    <Phone className="text-white" size={20} aria-hidden="true" />
-                                </div>
-                                <div>
-                                    <p className="text-sm text-gray-600 font-medium">Alternate Contact</p>
-                                    <p className="text-lg font-semibold text-gray-800">+91-700-167-1481</p>
                                 </div>
                             </a>
                         </div>

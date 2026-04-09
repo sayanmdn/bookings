@@ -1,6 +1,6 @@
 # WhatsApp Automated Reminder Setup
 
-This document explains how to set up automated WhatsApp messages for advance payment reminders.
+This document explains how to set up automated WhatsApp messages for advance payment reminders
 
 ## Prerequisites
 

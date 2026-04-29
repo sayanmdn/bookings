@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, Wifi, Coffee, Lock, Users, Mountain, ArrowRight, Instagram, Star } from 'lucide-react';
+import { MapPin, Wifi, Coffee, Lock, Users, Mountain, Phone, Instagram, Star } from 'lucide-react';
 import LandingNav from '@/components/LandingNav';
 
 export default function LandingPage() {
@@ -42,13 +42,11 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
               <a
-                href="https://www.booking.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="tel:+918391887973"
                 className="group px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-semibold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] flex items-center justify-center gap-2"
               >
-                Check Availability
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <Phone className="w-5 h-5" />
+                Call Me
               </a>
               <Link
                 href="#amenities"
